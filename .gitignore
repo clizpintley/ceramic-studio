@@ -1,0 +1,24 @@
+# Nuxt auto-generated files
+.nuxt
+.output
+dist
+
+# Node
+node_modules
+.npm
+package-lock.json
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db

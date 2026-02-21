@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "types": ["@nuxt/types"],
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  }
+}

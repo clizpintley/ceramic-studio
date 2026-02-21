@@ -1,0 +1,20 @@
+[
+  {
+    "id": "ceramic-rose-bowl",
+    "slug": "rose-bowl",
+    "title": "Hand-painted Rose Bowl",
+    "short": "A delicate bowl hand-painted with roses.",
+    "description": "This bowl is thrown and hand-painted with underglaze roses and finished with a glossy clear glaze. Dishwasher safe.",
+    "price": 45.00,
+    "image": "/images/rose-bowl.jpg"
+  },
+  {
+    "id": "ceramic-blue-mug",
+    "slug": "blue-mug",
+    "title": "Blue Meadow Mug",
+    "short": "Cozy mug with blue meadow motif.",
+    "description": "A comfortable 12oz mug hand-painted with a meadow scene. Lead-free glaze.",
+    "price": 28.00,
+    "image": "/images/blue-mug.jpg"
+  }
+]

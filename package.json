@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "nuxi dev",
     "build": "nuxi build",
-    "preview": "nuxi preview",
-    "postinstall": "chmod +x node_modules/.bin/* 2>/dev/null || true"
+    "preview": "nuxi preview"
   },
   "dependencies": {
     "nuxt": "^3.8.0"

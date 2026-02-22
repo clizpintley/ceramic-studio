@@ -1,5 +1,4 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": ".output/public",
-  "cacheMaxAgeSeconds": 0
+  "buildCommand": "npm ci && node node_modules/nuxi/bin/nuxi.mjs build",
+  "outputDirectory": ".output/public"
 }

@@ -3,12 +3,12 @@
     <div class="grid md:grid-cols-2 gap-8">
       <img :src="product.image" alt="" class="w-full h-96 object-cover rounded" />
       <div>
-        <h1 class="text-2xl font-bold">{{ product.title }}</h1>
+        <h1 class="text-2xl font-bold text-yellow-700">{{ product.title }}</h1>
         <p class="text-gray-600 mt-2">{{ product.description }}</p>
         <div class="mt-6 flex items-center justify-between">
-          <div class="text-2xl font-extrabold">${{ product.price }}</div>
+          <div class="text-2xl font-extrabold text-yellow-600">${{ product.price }}</div>
           <button
-            class="snipcart-add-item bg-emerald-600 text-white px-4 py-2 rounded"
+            class="snipcart-add-item bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 transition font-medium"
             :data-item-id="product.id"
             :data-item-price="product.price"
             :data-item-url="`/product/${product.slug}`"
@@ -30,9 +30,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 
-const modules = import.meta.glob('../../data/products/*.json', { eager: true, as: 'json' })
-const products = Object.values(modules) as any[]
-
+const { products } = useProducts()
 const route = useRoute()
 const slug = route.params.slug as string
 const product = products.find((p: any) => p.slug === slug)

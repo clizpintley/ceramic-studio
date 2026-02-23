@@ -85,7 +85,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useProducts } from '../composables/useProducts'
 
-const { products } = useProducts()
+const { products } = await useProducts()
 const introSlide = {
   id: 'intro-slide',
   image: '/images/tea2.jpeg',

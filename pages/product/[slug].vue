@@ -35,23 +35,12 @@
 import { useRoute } from 'vue-router'
 import { onMounted } from 'vue'
 import 'photoswipe/style.css'
+import { useProducts } from '../../composables/useProducts'
 
-const { products } = useProducts()
+const { products } = await useProducts()
 const route = useRoute()
 const slug = route.params.slug as string
 const product = products.find((p: any) => p.slug === slug)
-
-if (product) {
-  useHead({
-    title: `${product.title} — Art and About`,
-    meta: [
-      { name: 'description', content: product.short },
-      { property: 'og:title', content: product.title },
-      { property: 'og:description', content: product.short },
-      { property: 'og:image', content: product.image }
-    ]
-  })
-}
 
 onMounted(async () => {
   if (!product) return

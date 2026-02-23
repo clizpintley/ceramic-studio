@@ -39,23 +39,42 @@ import { computed, ref } from 'vue'
 import ProductCard from './ProductCard.vue'
 import { useProducts } from '../composables/useProducts'
 
-const { products } = useProducts()
+const { products } = await useProducts()
 
-const productGroups = [
-  { label: 'Drinkware', value: 'drinkware' },
-  { label: 'Tableware', value: 'tableware' },
-  { label: 'Decor', value: 'decor' },
-  { label: 'Tote Bags', value: 'tote-bags' }
-]
+const formatCategoryLabel = (category: string) => {
+  return category
+    .split('-')
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
 
-const activeGroup = ref('drinkware')
+const productGroups = computed(() => {
+  const uniqueCategories = Array.from(
+    new Set(
+      products
+        .map((product: any) => String(product.category || '').trim())
+        .filter(Boolean)
+    )
+  )
+
+  return uniqueCategories.map((category) => ({
+    label: formatCategoryLabel(category),
+    value: category
+  }))
+})
+
+const activeGroup = ref(productGroups.value[0]?.value ?? '')
 
 const filteredProducts = computed(() => {
+  if (!activeGroup.value) {
+    return products
+  }
   return products.filter((product: any) => product.category === activeGroup.value)
 })
 
 const activeLabel = computed(() => {
-  const selected = productGroups.find((group) => group.value === activeGroup.value)
+  const selected = productGroups.value.find((group) => group.value === activeGroup.value)
   return selected?.label ?? 'Products'
 })
 </script>

@@ -1,8 +1,8 @@
 <template>
   <section class="max-w-6xl mx-auto">
     <div class="mb-6">
-      <h1 class="text-3xl md:text-4xl font-bold text-[#9C4E3A] font-display">Product CMS</h1>
-      <p class="text-gray-700 mt-2">Create, edit, and remove products directly from this admin page.</p>
+      <h1 class="text-3xl md:text-4xl font-bold text-[#9C4E3A] font-display">Site CMS</h1>
+      <p class="text-gray-700 mt-2">Manage products and section content from one place.</p>
     </div>
 
     <div v-if="!isAuthenticated" class="max-w-md rounded-2xl border border-[#FFE083] bg-[#FFF8DC] p-6">
@@ -26,177 +26,451 @@
     </div>
 
     <div v-else>
-      <div class="mb-4 flex flex-wrap items-center gap-3">
-        <button
-          type="button"
-          class="bg-[#FFCB06] text-gray-800 px-4 py-2 rounded-lg border border-[#E6B800] font-medium"
-          @click="addProduct"
-        >
-          Add Product
-        </button>
-        <button
-          type="button"
-          class="bg-[#D75641] text-white px-4 py-2 rounded-lg hover:bg-[#C54D39] transition font-medium"
-          :disabled="isLoading"
-          @click="saveProducts"
-        >
-          {{ isLoading ? 'Saving...' : 'Save All Changes' }}
-        </button>
+      <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap gap-2">
+          <button
+            v-for="tab in cmsTabs"
+            :key="tab.value"
+            type="button"
+            class="px-4 py-2 rounded-lg border font-medium transition"
+            :class="activeTab === tab.value ? 'bg-[#FFCB06] border-[#E6B800] text-gray-800' : 'bg-white border-[#FFE083] text-[#9C4E3A]'"
+            @click="activeTab = tab.value"
+          >
+            {{ tab.label }}
+          </button>
+        </div>
         <button
           type="button"
           class="bg-white text-[#9C4E3A] px-4 py-2 rounded-lg border border-[#FFE083] font-medium"
-          :disabled="isLoading"
+          :disabled="isLoading || isContentSaving"
           @click="logout"
         >
           Sign out
         </button>
       </div>
 
-      <div class="mb-4 grid grid-cols-1 md:grid-cols-3 gap-3">
-        <label class="block md:col-span-2">
-          <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Search products</span>
-          <input
-            v-model="searchQuery"
-            class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white"
-            placeholder="Search by title, slug, id, short description"
-          />
-        </label>
-
-        <label class="block">
-          <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Filter by category</span>
-          <select v-model="categoryFilter" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white">
-            <option value="all">All categories</option>
-            <option value="drinkware">Drinkware</option>
-            <option value="tableware">Tableware</option>
-            <option value="decor">Decor</option>
-            <option value="tote-bags">Tote Bags</option>
-          </select>
-        </label>
-      </div>
-
-      <p class="text-sm text-gray-700 mb-3">Showing {{ filteredProducts.length }} of {{ products.length }} products</p>
-
       <p v-if="successMessage" class="text-green-700 text-sm mb-3">{{ successMessage }}</p>
       <p v-if="errorMessage" class="text-red-600 text-sm mb-3">{{ errorMessage }}</p>
 
-      <div class="space-y-4">
-        <article
-          v-for="item in filteredProducts"
-          :key="`${item.product.id}-${item.index}`"
-          class="rounded-2xl border border-[#FFE083] bg-[#FFF8DC] p-4"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-semibold text-[#9C4E3A]">Product #{{ item.index + 1 }}</h2>
-            <button
-              type="button"
-              class="text-sm px-3 py-1.5 rounded-lg bg-[#F37F61] text-white hover:bg-[#E56F54] transition"
-              @click="removeProduct(item.index)"
-            >
-              Remove
-            </button>
-          </div>
+      <div v-if="activeTab === 'products'">
+        <div class="mb-4 flex flex-wrap items-center justify-end gap-3">
+          <button
+            type="button"
+            class="bg-[#FFCB06] text-gray-800 px-4 py-2 rounded-lg border border-[#E6B800] font-medium"
+            @click="addProduct"
+          >
+            Add Product
+          </button>
+          <button
+            type="button"
+            class="bg-[#D75641] text-white px-4 py-2 rounded-lg hover:bg-[#C54D39] transition font-medium"
+            :disabled="isLoading"
+            @click="saveProducts"
+          >
+            {{ isLoading ? 'Saving...' : 'Save Products' }}
+          </button>
+        </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <label class="block">
-              <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">ID</span>
-              <input
-                v-model="item.product.id"
-                class="w-full rounded-lg border px-3 py-2 bg-white"
-                :class="hasFieldError(item.index, 'id') ? 'border-red-500' : 'border-[#FFE083]'"
-              />
-            </label>
+        <div class="mb-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Search products</span>
+            <input
+              v-model="searchQuery"
+              class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white"
+              placeholder="Search by title, slug, id, short description"
+            />
+          </label>
 
-            <label class="block">
-              <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Slug</span>
-              <input
-                v-model="item.product.slug"
-                class="w-full rounded-lg border px-3 py-2 bg-white"
-                :class="hasFieldError(item.index, 'slug') ? 'border-red-500' : 'border-[#FFE083]'"
-              />
-            </label>
+          <label class="block">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Filter by category</span>
+            <select v-model="categoryFilter" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white">
+              <option value="all">All categories</option>
+              <option v-for="category in categoryOptions" :key="`filter-${category}`" :value="category">
+                {{ formatCategoryLabel(category) }}
+              </option>
+            </select>
+          </label>
+        </div>
 
-            <label class="block">
-              <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Title</span>
-              <input
-                v-model="item.product.title"
-                class="w-full rounded-lg border px-3 py-2 bg-white"
-                :class="hasFieldError(item.index, 'title') ? 'border-red-500' : 'border-[#FFE083]'"
-              />
-            </label>
+        <p class="text-sm text-gray-700 mb-3">Showing {{ filteredProducts.length }} of {{ products.length }} products</p>
 
-            <label class="block">
-              <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Category</span>
-              <select v-model="item.product.category" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white">
-                <option value="drinkware">Drinkware</option>
-                <option value="tableware">Tableware</option>
-                <option value="decor">Decor</option>
-                <option value="tote-bags">Tote Bags</option>
-              </select>
-            </label>
+        <div class="space-y-4">
+          <article
+            v-for="item in filteredProducts"
+            :key="`${item.product.id}-${item.index}`"
+            class="rounded-2xl border border-[#FFE083] bg-[#FFF8DC] p-4"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-semibold text-[#9C4E3A]">Product #{{ item.index + 1 }}</h2>
+              <button
+                type="button"
+                class="text-sm px-3 py-1.5 rounded-lg bg-[#F37F61] text-white hover:bg-[#E56F54] transition"
+                @click="removeProduct(item.index)"
+              >
+                Remove
+              </button>
+            </div>
 
-            <label class="block md:col-span-2">
-              <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Short Description</span>
-              <input v-model="item.product.short" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
-            </label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <label class="block">
+                <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">ID</span>
+                <input
+                  v-model="item.product.id"
+                  class="w-full rounded-lg border px-3 py-2 bg-white"
+                  :class="hasFieldError(item.index, 'id') ? 'border-red-500' : 'border-[#FFE083]'"
+                />
+              </label>
 
-            <label class="block md:col-span-2">
-              <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Description</span>
-              <textarea v-model="item.product.description" rows="3" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white"></textarea>
-            </label>
+              <label class="block">
+                <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Slug</span>
+                <input
+                  v-model="item.product.slug"
+                  class="w-full rounded-lg border px-3 py-2 bg-white"
+                  :class="hasFieldError(item.index, 'slug') ? 'border-red-500' : 'border-[#FFE083]'"
+                />
+              </label>
 
-            <label class="block">
-              <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Price</span>
-              <input
-                v-model.number="item.product.price"
-                type="number"
-                min="0"
-                step="0.01"
-                class="w-full rounded-lg border px-3 py-2 bg-white"
-                :class="hasFieldError(item.index, 'price') ? 'border-red-500' : 'border-[#FFE083]'"
-              />
-            </label>
+              <label class="block">
+                <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Title</span>
+                <input
+                  v-model="item.product.title"
+                  class="w-full rounded-lg border px-3 py-2 bg-white"
+                  :class="hasFieldError(item.index, 'title') ? 'border-red-500' : 'border-[#FFE083]'"
+                />
+              </label>
 
-            <label class="block md:col-span-2">
-              <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Product Image</span>
-              <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-2">
-                <select v-model="item.product.image" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white">
-                  <option value="">Select image</option>
-                  <option v-for="imagePath in availableImages" :key="imagePath" :value="imagePath">
-                    {{ imagePath }}
-                  </option>
-                </select>
-                <div class="flex items-center gap-2">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    class="w-full text-sm"
-                    @change="onImageFileChange(item.index, $event)"
-                  />
-                  <button
-                    type="button"
-                    class="px-3 py-2 rounded-lg bg-[#D75641] text-white hover:bg-[#C54D39] transition text-sm font-medium whitespace-nowrap"
-                    :disabled="isUploadingImage || !selectedImageFiles[item.index]"
-                    @click="uploadProductImage(item.index)"
-                  >
-                    {{ isUploadingImage && uploadingIndex === item.index ? 'Uploading...' : 'Upload' }}
-                  </button>
+              <label class="block">
+                <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Category</span>
+                <input
+                  v-model="item.product.category"
+                  list="cms-category-options"
+                  class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white"
+                  placeholder="e.g. drinkware"
+                />
+              </label>
+
+              <label class="block md:col-span-2">
+                <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Short Description</span>
+                <input v-model="item.product.short" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+              </label>
+
+              <label class="block md:col-span-2">
+                <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Description</span>
+                <textarea v-model="item.product.description" rows="3" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white"></textarea>
+              </label>
+
+              <label class="block">
+                <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Price</span>
+                <input
+                  v-model.number="item.product.price"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  class="w-full rounded-lg border px-3 py-2 bg-white"
+                  :class="hasFieldError(item.index, 'price') ? 'border-red-500' : 'border-[#FFE083]'"
+                />
+              </label>
+
+              <label class="block md:col-span-2">
+                <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Product Image</span>
+                <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-2">
+                  <select v-model="item.product.image" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white">
+                    <option value="">Select image</option>
+                    <option v-for="imagePath in availableImages" :key="imagePath" :value="imagePath">
+                      {{ imagePath }}
+                    </option>
+                  </select>
+                  <div class="flex items-center gap-2">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      class="w-full text-sm"
+                      @change="onImageFileChange(item.index, $event)"
+                    />
+                    <button
+                      type="button"
+                      class="px-3 py-2 rounded-lg bg-[#D75641] text-white hover:bg-[#C54D39] transition text-sm font-medium whitespace-nowrap"
+                      :disabled="isUploadingImage || !selectedImageFiles[item.index]"
+                      @click="uploadProductImage(item.index)"
+                    >
+                      {{ isUploadingImage && uploadingIndex === item.index ? 'Uploading...' : 'Upload' }}
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <p v-if="selectedImageFiles[item.index]" class="text-xs text-gray-600 mt-1">
-                Selected: {{ selectedImageFiles[item.index]?.name }}
-              </p>
-              <img
-                v-if="item.product.image"
-                :src="item.product.image"
-                alt="Product preview"
-                class="mt-2 h-24 w-24 rounded-lg border border-[#FFE083] object-cover bg-white"
+                <p v-if="selectedImageFiles[item.index]" class="text-xs text-gray-600 mt-1">
+                  Selected: {{ selectedImageFiles[item.index]?.name }}
+                </p>
+                <img
+                  v-if="item.product.image"
+                  :src="item.product.image"
+                  alt="Product preview"
+                  class="mt-2 h-24 w-24 rounded-lg border border-[#FFE083] object-cover bg-white"
+                />
+              </label>
+            </div>
+          </article>
+          <p v-if="filteredProducts.length === 0" class="text-sm text-gray-700">No products match your search/filter.</p>
+        </div>
+      </div>
+
+      <div v-else-if="activeTab === 'categories'" class="rounded-2xl border border-[#FFE083] bg-[#FFF8DC] p-5 md:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <h2 class="text-2xl font-bold text-[#9C4E3A] font-display">Product Categories</h2>
+          <button
+            type="button"
+            class="bg-[#D75641] text-white px-4 py-2 rounded-lg hover:bg-[#C54D39] transition font-medium"
+            :disabled="isCategoriesSaving"
+            @click="saveCategories"
+          >
+            {{ isCategoriesSaving ? 'Saving...' : 'Save Categories' }}
+          </button>
+        </div>
+
+        <div class="mb-4 flex flex-wrap items-center gap-2">
+          <input
+            v-model="newCategoryName"
+            class="w-full md:w-80 rounded-lg border border-[#FFE083] px-3 py-2 bg-white"
+            placeholder="new-category"
+            @keyup.enter="addCategory"
+          />
+          <button
+            type="button"
+            class="bg-[#FFCB06] text-gray-800 px-4 py-2 rounded-lg border border-[#E6B800] font-medium"
+            @click="addCategory"
+          >
+            Add Category
+          </button>
+        </div>
+
+        <div class="space-y-3">
+          <div
+            v-for="category in categories"
+            :key="`managed-${category}`"
+            class="rounded-lg border border-[#FFE083] bg-white p-3"
+          >
+            <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_auto] gap-2 items-center">
+              <input
+                :value="category"
+                class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white"
+                @change="renameCategory(category, ($event.target as HTMLInputElement).value)"
               />
-            </label>
+              <span class="text-sm text-gray-600">{{ getCategoryUsageCount(category) }} products</span>
+              <button
+                type="button"
+                class="text-sm px-3 py-2 rounded-lg bg-[#F37F61] text-white hover:bg-[#E56F54] transition"
+                :disabled="getCategoryUsageCount(category) > 0"
+                :class="getCategoryUsageCount(category) > 0 ? 'opacity-60 cursor-not-allowed' : ''"
+                @click="deleteCategory(category)"
+              >
+                {{ getCategoryUsageCount(category) > 0 ? 'In use' : 'Delete' }}
+              </button>
+            </div>
           </div>
-        </article>
-        <p v-if="filteredProducts.length === 0" class="text-sm text-gray-700">No products match your search/filter.</p>
+        </div>
+
+        <p class="text-sm text-gray-600 mt-4">
+          Tip: categories in use by products cannot be deleted until those products are reassigned.
+        </p>
+      </div>
+
+      <div v-else-if="activeTab === 'about'" class="rounded-2xl border border-[#FFE083] bg-[#FFF8DC] p-5 md:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <h2 class="text-2xl font-bold text-[#9C4E3A] font-display">About Me</h2>
+          <button
+            type="button"
+            class="bg-[#D75641] text-white px-4 py-2 rounded-lg hover:bg-[#C54D39] transition font-medium"
+            :disabled="isContentSaving"
+            @click="saveSiteContent"
+          >
+            {{ isContentSaving ? 'Saving...' : 'Save About' }}
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Heading</span>
+            <input v-model="siteContent.about.heading" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Paragraphs (one per line)</span>
+            <textarea
+              :value="siteContent.about.paragraphs.join('\n')"
+              rows="8"
+              class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white"
+              @input="updateAboutParagraphs($event)"
+            ></textarea>
+          </label>
+
+          <label class="block">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Image</span>
+            <select v-model="siteContent.about.image" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white">
+              <option value="">Select image</option>
+              <option v-for="imagePath in availableImages" :key="`about-${imagePath}`" :value="imagePath">{{ imagePath }}</option>
+            </select>
+          </label>
+
+          <label class="block">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Upload image</span>
+            <div class="flex items-center gap-2">
+              <input type="file" accept="image/*" class="w-full text-sm" @change="onContentImageFileChange('about', $event)" />
+              <button
+                type="button"
+                class="px-3 py-2 rounded-lg bg-[#D75641] text-white hover:bg-[#C54D39] transition text-sm font-medium whitespace-nowrap"
+                :disabled="isUploadingImage || !selectedContentImageFiles.about"
+                @click="uploadContentImage('about')"
+              >
+                {{ isUploadingImage && uploadingContentField === 'about' ? 'Uploading...' : 'Upload' }}
+              </button>
+            </div>
+          </label>
+
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Image Alt</span>
+            <input v-model="siteContent.about.imageAlt" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+        </div>
+      </div>
+
+      <div v-else-if="activeTab === 'behind'" class="rounded-2xl border border-[#FFE083] bg-[#FFF8DC] p-5 md:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <h2 class="text-2xl font-bold text-[#9C4E3A] font-display">Behind the Scenes</h2>
+          <button
+            type="button"
+            class="bg-[#D75641] text-white px-4 py-2 rounded-lg hover:bg-[#C54D39] transition font-medium"
+            :disabled="isContentSaving"
+            @click="saveSiteContent"
+          >
+            {{ isContentSaving ? 'Saving...' : 'Save Behind the Scenes' }}
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Heading</span>
+            <input v-model="siteContent.behindTheScenes.heading" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Subtitle</span>
+            <input v-model="siteContent.behindTheScenes.subtitle" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Intro text</span>
+            <textarea v-model="siteContent.behindTheScenes.intro" rows="4" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white"></textarea>
+          </label>
+
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Cards (format: Title | Text, one per line)</span>
+            <textarea
+              :value="behindCardsText"
+              rows="6"
+              class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white"
+              @input="updateBehindCards($event)"
+            ></textarea>
+          </label>
+
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Footer text</span>
+            <textarea v-model="siteContent.behindTheScenes.footerText" rows="3" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white"></textarea>
+          </label>
+
+          <label class="block">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Instagram URL</span>
+            <input v-model="siteContent.behindTheScenes.instagramUrl" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Instagram Button Label</span>
+            <input v-model="siteContent.behindTheScenes.instagramLabel" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+        </div>
+      </div>
+
+      <div v-else class="rounded-2xl border border-[#FFE083] bg-[#FFF8DC] p-5 md:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <h2 class="text-2xl font-bold text-[#9C4E3A] font-display">Contact</h2>
+          <button
+            type="button"
+            class="bg-[#D75641] text-white px-4 py-2 rounded-lg hover:bg-[#C54D39] transition font-medium"
+            :disabled="isContentSaving"
+            @click="saveSiteContent"
+          >
+            {{ isContentSaving ? 'Saving...' : 'Save Contact' }}
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Heading</span>
+            <input v-model="siteContent.contact.heading" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Intro text</span>
+            <textarea v-model="siteContent.contact.intro" rows="3" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white"></textarea>
+          </label>
+
+          <label class="block">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Email label</span>
+            <input v-model="siteContent.contact.emailLabel" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Email address</span>
+            <input v-model="siteContent.contact.emailAddress" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Instagram label</span>
+            <input v-model="siteContent.contact.instagramLabel" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Instagram handle</span>
+            <input v-model="siteContent.contact.instagramHandle" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Instagram URL</span>
+            <input v-model="siteContent.contact.instagramUrl" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Image</span>
+            <select v-model="siteContent.contact.image" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white">
+              <option value="">Select image</option>
+              <option v-for="imagePath in availableImages" :key="`contact-${imagePath}`" :value="imagePath">{{ imagePath }}</option>
+            </select>
+          </label>
+
+          <label class="block">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Upload image</span>
+            <div class="flex items-center gap-2">
+              <input type="file" accept="image/*" class="w-full text-sm" @change="onContentImageFileChange('contact', $event)" />
+              <button
+                type="button"
+                class="px-3 py-2 rounded-lg bg-[#D75641] text-white hover:bg-[#C54D39] transition text-sm font-medium whitespace-nowrap"
+                :disabled="isUploadingImage || !selectedContentImageFiles.contact"
+                @click="uploadContentImage('contact')"
+              >
+                {{ isUploadingImage && uploadingContentField === 'contact' ? 'Uploading...' : 'Upload' }}
+              </button>
+            </div>
+          </label>
+
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Image Alt</span>
+            <input v-model="siteContent.contact.imageAlt" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+        </div>
       </div>
     </div>
+
+    <datalist id="cms-category-options">
+      <option v-for="category in categoryOptions" :key="`cat-${category}`" :value="category" />
+    </datalist>
   </section>
 </template>
 
@@ -215,9 +489,71 @@ type Product = {
   image: string
 }
 
+type SiteContent = {
+  about: {
+    heading: string
+    paragraphs: string[]
+    image: string
+    imageAlt: string
+  }
+  behindTheScenes: {
+    heading: string
+    subtitle: string
+    intro: string
+    cards: Array<{
+      title: string
+      text: string
+    }>
+    footerText: string
+    instagramUrl: string
+    instagramLabel: string
+  }
+  contact: {
+    heading: string
+    intro: string
+    emailLabel: string
+    emailAddress: string
+    instagramLabel: string
+    instagramHandle: string
+    instagramUrl: string
+    image: string
+    imageAlt: string
+  }
+}
+
+const defaultSiteContent = (): SiteContent => ({
+  about: {
+    heading: "I'm Tea Pupkova",
+    paragraphs: [],
+    image: '/images/tea.png',
+    imageAlt: 'Tea Pupkova in the studio'
+  },
+  behindTheScenes: {
+    heading: 'Behind the Scenes',
+    subtitle: '',
+    intro: '',
+    cards: [],
+    footerText: '',
+    instagramUrl: 'https://www.instagram.com/artandaboutpupkova',
+    instagramLabel: 'Follow @artandaboutpupkova'
+  },
+  contact: {
+    heading: "Let's Connect",
+    intro: '',
+    emailLabel: 'Email:',
+    emailAddress: '',
+    instagramLabel: 'Instagram:',
+    instagramHandle: '@artandaboutpupkova',
+    instagramUrl: 'https://www.instagram.com/artandaboutpupkova',
+    image: '/images/tea3.jpeg',
+    imageAlt: 'Tea Pupkova contact portrait'
+  }
+})
+
 const passwordInput = ref('')
 const cmsPassword = ref('')
 const isAuthenticated = ref(false)
+const activeTab = ref<'products' | 'categories' | 'about' | 'behind' | 'contact'>('products')
 const isLoading = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
@@ -227,8 +563,40 @@ const searchQuery = ref('')
 const categoryFilter = ref('all')
 const availableImages = ref<string[]>([])
 const selectedImageFiles = ref<Record<number, File | null>>({})
+const selectedContentImageFiles = ref<{ about: File | null; contact: File | null }>({ about: null, contact: null })
 const isUploadingImage = ref(false)
 const uploadingIndex = ref<number | null>(null)
+const uploadingContentField = ref<'about' | 'contact' | null>(null)
+const siteContent = ref<SiteContent>(defaultSiteContent())
+const isContentSaving = ref(false)
+const categories = ref<string[]>([])
+const newCategoryName = ref('')
+const isCategoriesSaving = ref(false)
+
+const cmsTabs = [
+  { label: 'Products', value: 'products' as const },
+  { label: 'Categories', value: 'categories' as const },
+  { label: 'About Me', value: 'about' as const },
+  { label: 'Behind the Scenes', value: 'behind' as const },
+  { label: 'Contact', value: 'contact' as const }
+]
+
+const categoryOptions = computed(() => {
+  return Array.from(new Set([
+    ...categories.value,
+    ...products.value
+      .map((product) => String(product.category || '').trim())
+      .filter(Boolean)
+  ])).sort((a, b) => a.localeCompare(b))
+})
+
+const formatCategoryLabel = (category: string) => {
+  return category
+    .split('-')
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
 
 const filteredProducts = computed(() => {
   const query = searchQuery.value.trim().toLowerCase()
@@ -253,6 +621,12 @@ const filteredProducts = computed(() => {
     })
 })
 
+const behindCardsText = computed(() => {
+  return siteContent.value.behindTheScenes.cards
+    .map((card) => `${card.title} | ${card.text}`)
+    .join('\n')
+})
+
 const makeHeaders = () => ({
   'x-cms-password': cmsPassword.value
 })
@@ -270,6 +644,36 @@ const loadImages = async () => {
     headers: makeHeaders()
   })
   availableImages.value = response.images || []
+}
+
+const loadSiteContent = async () => {
+  const response = await $fetch<{ content: SiteContent }>('/api/cms/site-content', {
+    headers: makeHeaders()
+  })
+  siteContent.value = response.content || defaultSiteContent()
+}
+
+const loadCategories = async () => {
+  const response = await $fetch<{ categories: string[] }>('/api/cms/categories', {
+    headers: makeHeaders()
+  })
+  categories.value = response.categories || []
+}
+
+const saveCategories = async () => {
+  isCategoriesSaving.value = true
+  try {
+    await $fetch('/api/cms/categories', {
+      method: 'POST',
+      headers: makeHeaders(),
+      body: { categories: categories.value }
+    })
+    successMessage.value = 'Categories saved successfully.'
+  } catch (error: any) {
+    errorMessage.value = error?.data?.statusMessage || 'Failed to save categories.'
+  } finally {
+    isCategoriesSaving.value = false
+  }
 }
 
 const validateProducts = (list: Product[]) => {
@@ -316,7 +720,7 @@ const login = async () => {
 
   try {
     cmsPassword.value = passwordInput.value.trim()
-    await Promise.all([loadProducts(), loadImages()])
+    await Promise.all([loadProducts(), loadImages(), loadSiteContent(), loadCategories()])
     isAuthenticated.value = true
   } catch (error: any) {
     errorMessage.value = error?.data?.statusMessage || 'Login failed.'
@@ -334,7 +738,11 @@ const logout = () => {
   products.value = []
   validationErrors.value = {}
   selectedImageFiles.value = {}
+  selectedContentImageFiles.value = { about: null, contact: null }
   availableImages.value = []
+  categories.value = []
+  newCategoryName.value = ''
+  siteContent.value = defaultSiteContent()
   errorMessage.value = ''
   successMessage.value = ''
 }
@@ -375,6 +783,7 @@ const uploadProductImage = async (index: number) => {
   successMessage.value = ''
   isUploadingImage.value = true
   uploadingIndex.value = index
+  uploadingContentField.value = null
 
   try {
     const formData = new FormData()
@@ -395,6 +804,92 @@ const uploadProductImage = async (index: number) => {
   } finally {
     isUploadingImage.value = false
     uploadingIndex.value = null
+  }
+}
+
+const onContentImageFileChange = (field: 'about' | 'contact', event: Event) => {
+  const target = event.target as HTMLInputElement
+  selectedContentImageFiles.value[field] = target.files?.[0] || null
+}
+
+const uploadContentImage = async (field: 'about' | 'contact') => {
+  const file = selectedContentImageFiles.value[field]
+  if (!file) {
+    return
+  }
+
+  errorMessage.value = ''
+  successMessage.value = ''
+  isUploadingImage.value = true
+  uploadingIndex.value = null
+  uploadingContentField.value = field
+
+  try {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const response = await $fetch<{ image: string }>('/api/cms/images', {
+      method: 'POST',
+      headers: makeHeaders(),
+      body: formData
+    })
+
+    if (field === 'about') {
+      siteContent.value.about.image = response.image
+    } else {
+      siteContent.value.contact.image = response.image
+    }
+
+    selectedContentImageFiles.value[field] = null
+    await loadImages()
+    successMessage.value = 'Section image uploaded successfully.'
+  } catch (error: any) {
+    errorMessage.value = error?.data?.statusMessage || 'Image upload failed.'
+  } finally {
+    isUploadingImage.value = false
+    uploadingContentField.value = null
+  }
+}
+
+const updateAboutParagraphs = (event: Event) => {
+  const target = event.target as HTMLTextAreaElement
+  siteContent.value.about.paragraphs = target.value
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+}
+
+const updateBehindCards = (event: Event) => {
+  const target = event.target as HTMLTextAreaElement
+  siteContent.value.behindTheScenes.cards = target.value
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [titlePart, ...textParts] = line.split('|')
+      return {
+        title: (titlePart || '').trim(),
+        text: textParts.join('|').trim()
+      }
+    })
+}
+
+const saveSiteContent = async () => {
+  errorMessage.value = ''
+  successMessage.value = ''
+  isContentSaving.value = true
+
+  try {
+    await $fetch('/api/cms/site-content', {
+      method: 'POST',
+      headers: makeHeaders(),
+      body: { content: siteContent.value }
+    })
+    successMessage.value = 'Section content saved successfully.'
+  } catch (error: any) {
+    errorMessage.value = error?.data?.statusMessage || 'Failed to save section content.'
+  } finally {
+    isContentSaving.value = false
   }
 }
 
@@ -423,5 +918,52 @@ const saveProducts = async () => {
   } finally {
     isLoading.value = false
   }
+}
+
+const addCategory = () => {
+  const candidate = newCategoryName.value.trim().toLowerCase()
+  if (!candidate) {
+    return
+  }
+
+  if (!categories.value.includes(candidate)) {
+    categories.value.push(candidate)
+    categories.value.sort((a, b) => a.localeCompare(b))
+  }
+
+  newCategoryName.value = ''
+}
+
+const renameCategory = (oldValue: string, newValue: string) => {
+  const normalized = newValue.trim().toLowerCase()
+  if (!normalized || normalized === oldValue) {
+    return
+  }
+
+  if (categories.value.includes(normalized)) {
+    errorMessage.value = `Category \"${normalized}\" already exists.`
+    return
+  }
+
+  categories.value = categories.value.map((category) => (category === oldValue ? normalized : category))
+  products.value = products.value.map((product) => ({
+    ...product,
+    category: product.category === oldValue ? normalized : product.category
+  }))
+}
+
+const deleteCategory = (categoryToDelete: string) => {
+  const usedByProducts = products.value.some((product) => product.category === categoryToDelete)
+
+  if (usedByProducts) {
+    errorMessage.value = `Cannot delete \"${categoryToDelete}\" while products still use it. Reassign those products first.`
+    return
+  }
+
+  categories.value = categories.value.filter((category) => category !== categoryToDelete)
+}
+
+const getCategoryUsageCount = (category: string) => {
+  return products.value.filter((product) => product.category === category).length
 }
 </script>

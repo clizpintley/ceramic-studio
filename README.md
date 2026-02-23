@@ -73,13 +73,36 @@ This project includes a simple custom CMS page to manage products directly.
 
 - Admin UI: `/cms`
 - API endpoint: `/api/cms/products`
+- Section content endpoint: `/api/cms/site-content`
+- Categories endpoint: `/api/cms/categories`
 - Data file: `data/products.json`
+- Section data file: `data/site-content.json`
+- Categories data file: `data/product-categories.json`
 
 Set a password in `.env`:
 
 ```bash
 CMS_PASSWORD=YOUR_STRONG_PASSWORD
 ```
+
+For Vercel persistence, also set:
+
+```bash
+BLOB_READ_WRITE_TOKEN=YOUR_VERCEL_BLOB_RW_TOKEN
+```
+
+When `BLOB_READ_WRITE_TOKEN` is set, CMS content and uploads are stored in Vercel Blob.
+Without it, local filesystem storage is used.
+
+CMS storage health check
+
+Use this endpoint to verify auth and storage mode after deploy:
+
+```bash
+/api/health/cms-storage?password=YOUR_CMS_PASSWORD
+```
+
+It returns whether CMS auth works and whether storage is using `vercel-blob` or `local-filesystem`.
 
 Restart the app and open `/cms`.
 

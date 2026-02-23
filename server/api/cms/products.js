@@ -1,21 +1,11 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
-import { dirname, join } from 'node:path'
+import { join } from 'node:path'
 import { createError, defineEventHandler, getHeader, readBody } from 'h3'
-
-type Product = {
-  id: string
-  slug: string
-  category: string
-  title: string
-  short: string
-  description: string
-  price: number
-  image: string
-}
+import { readJsonData, writeJsonData } from '../../utils/cms-storage'
 
 const productsFilePath = join(process.cwd(), 'data', 'products.json')
+const productsBlobKey = 'cms/data/products.json'
 
-const requireCmsAuth = (event: any) => {
+const requireCmsAuth = (event) => {
   const config = useRuntimeConfig(event)
   const requestPassword = getHeader(event, 'x-cms-password') || ''
 
@@ -34,7 +24,7 @@ const requireCmsAuth = (event: any) => {
   }
 }
 
-const normalizeProduct = (product: any): Product => ({
+const normalizeProduct = (product) => ({
   id: String(product?.id ?? '').trim(),
   slug: String(product?.slug ?? '').trim(),
   category: String(product?.category ?? '').trim(),
@@ -45,8 +35,8 @@ const normalizeProduct = (product: any): Product => ({
   image: String(product?.image ?? '').trim()
 })
 
-const validateProduct = (product: Product, index: number) => {
-  const errors: string[] = []
+const validateProduct = (product, index) => {
+  const errors = []
 
   if (!product.id) {
     errors.push('id is required')
@@ -72,24 +62,23 @@ const validateProduct = (product: Product, index: number) => {
   }
 }
 
-const readProducts = async (): Promise<Product[]> => {
-  try {
-    const content = await readFile(productsFilePath, 'utf-8')
-    const parsed = JSON.parse(content)
-    const list = Array.isArray(parsed?.products) ? parsed.products : []
-    return list.map(normalizeProduct)
-  } catch {
-    return []
-  }
+const readProducts = async () => {
+  const parsed = await readJsonData({
+    localPath: productsFilePath,
+    blobKey: productsBlobKey,
+    fallback: { products: [] }
+  })
+
+  const list = Array.isArray(parsed?.products) ? parsed.products : []
+  return list.map(normalizeProduct)
 }
 
-const writeProducts = async (products: Product[]) => {
-  await mkdir(dirname(productsFilePath), { recursive: true })
-  await writeFile(
-    productsFilePath,
-    JSON.stringify({ products }, null, 2),
-    'utf-8'
-  )
+const writeProducts = async (products) => {
+  await writeJsonData({
+    localPath: productsFilePath,
+    blobKey: productsBlobKey,
+    data: { products }
+  })
 }
 
 export default defineEventHandler(async (event) => {

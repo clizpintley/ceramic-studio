@@ -41,10 +41,12 @@ useHead({
 })
 
 let revealObserver: IntersectionObserver | null = null
+let revealFallbackTimer: ReturnType<typeof setTimeout> | null = null
 
 onMounted(() => {
   const revealItems = document.querySelectorAll('.reveal-item')
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const isMobile = window.matchMedia('(max-width: 767px)').matches
 
   if (reduceMotion) {
     revealItems.forEach((item) => item.classList.add('is-visible'))
@@ -61,17 +63,25 @@ onMounted(() => {
       })
     },
     {
-      threshold: 0.15,
-      rootMargin: '0px 0px -10% 0px'
+      threshold: isMobile ? 0.01 : 0.12,
+      rootMargin: isMobile ? '0px 0px 0px 0px' : '0px 0px -10% 0px'
     }
   )
 
   revealItems.forEach((item) => revealObserver?.observe(item))
+
+  revealFallbackTimer = setTimeout(() => {
+    revealItems.forEach((item) => item.classList.add('is-visible'))
+  }, 1800)
 })
 
 onBeforeUnmount(() => {
   revealObserver?.disconnect()
   revealObserver = null
+  if (revealFallbackTimer) {
+    clearTimeout(revealFallbackTimer)
+    revealFallbackTimer = null
+  }
 })
 </script>
 

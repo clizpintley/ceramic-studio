@@ -1,4 +1,4 @@
-import productsData from '~/data/products.json'
+import { $fetch } from 'ofetch'
 
 export type Product = {
   id: string
@@ -11,11 +11,25 @@ export type Product = {
   image: string
 }
 
-export const useProducts = () => {
-  const products = ((productsData as { products: Product[] }).products ?? []).map((product) => ({
-    ...product,
-    price: Number(product.price)
-  }))
+let cachedProducts: Product[] | null = null
+let productsLoaded = false
 
-  return { products }
+export const useProducts = async () => {
+  const fallbackProducts: Product[] = []
+
+  if (!productsLoaded) {
+    try {
+      const response = await $fetch<{ products: Product[] }>('/api/content/products')
+      cachedProducts = (response.products ?? []).map((product) => ({
+        ...product,
+        price: Number(product.price)
+      }))
+    } catch {
+      cachedProducts = fallbackProducts
+    } finally {
+      productsLoaded = true
+    }
+  }
+
+  return { products: cachedProducts ?? fallbackProducts }
 }

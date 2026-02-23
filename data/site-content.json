@@ -1,0 +1,51 @@
+{
+  "about": {
+    "heading": "I'm Tea Pupkova",
+    "paragraphs": [
+      "I create hand-painted ceramics that turn everyday moments into art—functional pieces made to be used, loved, and part of your home rituals.",
+      "From mugs and teapots to bowls and custom pieces, I shape each form by hand and illustrate every surface with care, often inspired by stories and characters.",
+      "My process starts with sketching ideas and testing forms in clay until they feel balanced in the hand. After throwing and trimming, I paint each piece with layered underglaze details, then finish everything with food-safe glaze and careful kiln firing.",
+      "I'm drawn to playful visual language—bold symbols, expressive lines, and designs that feel personal. I love creating ceramics that can live on a shelf as art, but also become part of your morning coffee, dinner table, or daily routine.",
+      "Because each item is handmade in small batches, no two are exactly the same. That uniqueness is intentional: every piece carries its own character, and I hope it brings warmth, color, and a little story into your home."
+    ],
+    "image": "/images/tea.png",
+    "imageAlt": "Tea Pupkova in the studio"
+  },
+  "behindTheScenes": {
+    "heading": "Behind the Scenes",
+    "subtitle": "Take a peek into my creative process and studio.",
+    "intro": "Every collection begins with sketches, color tests, and small experiments in form. I often build a theme around symbols, stories, or characters, then translate those ideas into usable objects that still feel artistic and one-of-a-kind.",
+    "cards": [
+      {
+        "title": "The Process",
+        "text": "Each piece starts on the potter's wheel, where I shape functional forms with intention and balance. Once the clay is ready, I hand-paint details with underglaze to bring each design to life."
+      },
+      {
+        "title": "Inspiration",
+        "text": "My inspiration comes from nature, pop culture, and everyday moments. I blend traditional ceramics with contemporary storytelling to create pieces that feel personal and joyful."
+      },
+      {
+        "title": "Materials & Firing",
+        "text": "I use durable stoneware clay and food-safe glazes, then fire each piece in multiple stages. This gives every mug, bowl, and plate the strength for daily use while preserving rich color and surface detail."
+      },
+      {
+        "title": "Studio Rhythm",
+        "text": "Studio days move between throwing, trimming, painting, glazing, and kiln work. Because each stage takes time, pieces are made in small batches with close attention to detail from start to final firing."
+      }
+    ],
+    "footerText": "If you enjoy seeing work-in-progress moments, kiln openings, and new collection previews, follow along on Instagram.",
+    "instagramUrl": "https://www.instagram.com/artandaboutpupkova",
+    "instagramLabel": "Follow @artandaboutpupkova"
+  },
+  "contact": {
+    "heading": "Let's Connect",
+    "intro": "Have questions, want a custom piece, or just want to say hello? I'd love to hear from you.",
+    "emailLabel": "Email:",
+    "emailAddress": "pupkovateodora@gmail.com",
+    "instagramLabel": "Instagram:",
+    "instagramHandle": "@artandaboutpupkova",
+    "instagramUrl": "https://www.instagram.com/artandaboutpupkova",
+    "image": "/images/tea3.jpeg",
+    "imageAlt": "Tea Pupkova contact portrait"
+  }
+}

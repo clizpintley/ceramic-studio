@@ -1,0 +1,118 @@
+import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
+import { dirname, extname, join } from 'node:path'
+import { list, put } from '@vercel/blob'
+
+const blobToken = process.env.BLOB_READ_WRITE_TOKEN || ''
+const isBlobEnabled = () => Boolean(blobToken)
+
+export const allowedImageExtensions = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg'])
+
+const getBlobJson = async (key) => {
+  const result = await list({ prefix: key, limit: 1, token: blobToken })
+  const blob = result.blobs.find((entry) => entry.pathname === key) || result.blobs[0]
+
+  if (!blob) {
+    return null
+  }
+
+  const response = await fetch(blob.url)
+  if (!response.ok) {
+    return null
+  }
+
+  return response.json()
+}
+
+export const readJsonData = async ({ localPath, blobKey, fallback }) => {
+  if (isBlobEnabled()) {
+    const blobData = await getBlobJson(blobKey)
+    if (blobData) {
+      return blobData
+    }
+  }
+
+  try {
+    const content = await readFile(localPath, 'utf-8')
+    return JSON.parse(content)
+  } catch {
+    return fallback
+  }
+}
+
+export const writeJsonData = async ({ localPath, blobKey, data }) => {
+  const payload = JSON.stringify(data, null, 2)
+
+  if (isBlobEnabled()) {
+    await put(blobKey, payload, {
+      access: 'public',
+      addRandomSuffix: false,
+      contentType: 'application/json',
+      token: blobToken
+    })
+    return
+  }
+
+  await mkdir(dirname(localPath), { recursive: true })
+  await writeFile(localPath, payload, 'utf-8')
+}
+
+const getImageListFromDir = async (directory, urlPrefix) => {
+  try {
+    const files = await readdir(directory)
+    return files
+      .filter((fileName) => allowedImageExtensions.has(extname(fileName).toLowerCase()))
+      .map((fileName) => `${urlPrefix}/${fileName}`)
+  } catch {
+    return []
+  }
+}
+
+export const listCmsImages = async () => {
+  const localImagesDir = join(process.cwd(), 'public', 'images')
+  const localUploadsDir = join(process.cwd(), 'public', 'uploads')
+
+  const localImageFiles = await getImageListFromDir(localImagesDir, '/images')
+  const localUploadFiles = await getImageListFromDir(localUploadsDir, '/uploads')
+
+  let blobUploadFiles = []
+  if (isBlobEnabled()) {
+    const result = await list({ prefix: 'cms/uploads/', token: blobToken })
+    blobUploadFiles = result.blobs.map((entry) => entry.url)
+  }
+
+  return Array.from(new Set([...localImageFiles, ...localUploadFiles, ...blobUploadFiles]))
+    .sort((a, b) => a.localeCompare(b))
+}
+
+const sanitizeBaseName = (name) => {
+  return String(name)
+    .toLowerCase()
+    .replace(/\.[^/.]+$/, '')
+    .replace(/[^a-z0-9-]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+export const uploadCmsImage = async (filePart) => {
+  const extension = extname(filePart.filename || '').toLowerCase()
+  if (!allowedImageExtensions.has(extension)) {
+    throw new Error('Unsupported image format.')
+  }
+
+  const baseName = sanitizeBaseName(filePart.filename || 'upload') || 'upload'
+  const outputFileName = `${baseName}-${Date.now()}${extension}`
+
+  if (isBlobEnabled()) {
+    const blob = await put(`cms/uploads/${outputFileName}`, filePart.data, {
+      access: 'public',
+      addRandomSuffix: false,
+      contentType: filePart.type || 'application/octet-stream',
+      token: blobToken
+    })
+    return blob.url
+  }
+
+  const uploadsDir = join(process.cwd(), 'public', 'uploads')
+  await mkdir(uploadsDir, { recursive: true })
+  await writeFile(join(uploadsDir, outputFileName), filePart.data)
+  return `/uploads/${outputFileName}`
+}

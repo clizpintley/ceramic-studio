@@ -5,6 +5,9 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 3
   },
+  experimental: {
+    appManifest: false
+  },
   modules: ['@nuxtjs/tailwindcss'],
   css: ['~/assets/css/tailwind.css'],
   devServer: {

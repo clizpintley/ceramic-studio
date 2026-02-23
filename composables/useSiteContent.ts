@@ -23,11 +23,21 @@ export type SiteContent = {
   contact: {
     heading: string
     intro: string
+    showEmail: boolean
     emailLabel: string
     emailAddress: string
+    showInstagram: boolean
     instagramLabel: string
     instagramHandle: string
     instagramUrl: string
+    showEtsy: boolean
+    etsyLabel: string
+    etsyName: string
+    etsyUrl: string
+    showFacebook: boolean
+    facebookLabel: string
+    facebookHandle: string
+    facebookUrl: string
     image: string
     imageAlt: string
   }
@@ -72,11 +82,21 @@ const defaultFallbackContent: SiteContent = {
   contact: {
     heading: "Let's Connect",
     intro: '',
+    showEmail: true,
     emailLabel: 'Email:',
     emailAddress: '',
+    showInstagram: true,
     instagramLabel: 'Instagram:',
     instagramHandle: '@artandaboutpupkova',
     instagramUrl: 'https://www.instagram.com/artandaboutpupkova',
+    showEtsy: true,
+    etsyLabel: 'Etsy shop:',
+    etsyName: 'Art & About',
+    etsyUrl: 'https://www.etsy.com/shop/artandabout',
+    showFacebook: false,
+    facebookLabel: 'Facebook:',
+    facebookHandle: 'Art & About',
+    facebookUrl: '',
     image: '/images/tea3.jpeg',
     imageAlt: 'Tea Pupkova contact portrait'
   },

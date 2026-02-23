@@ -591,6 +591,28 @@
             <textarea v-model="siteContent.contact.intro" rows="3" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white"></textarea>
           </label>
 
+          <div class="block md:col-span-2 rounded-lg border border-[#FFE083] bg-white p-3">
+            <span class="block text-sm text-[#9C4E3A] mb-2 font-medium">Visible contact items</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+                <input v-model="siteContent.contact.showEmail" type="checkbox" class="h-4 w-4 rounded border-[#FFE083] text-[#D75641]" />
+                Show Email
+              </label>
+              <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+                <input v-model="siteContent.contact.showInstagram" type="checkbox" class="h-4 w-4 rounded border-[#FFE083] text-[#D75641]" />
+                Show Instagram
+              </label>
+              <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+                <input v-model="siteContent.contact.showEtsy" type="checkbox" class="h-4 w-4 rounded border-[#FFE083] text-[#D75641]" />
+                Show Etsy
+              </label>
+              <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+                <input v-model="siteContent.contact.showFacebook" type="checkbox" class="h-4 w-4 rounded border-[#FFE083] text-[#D75641]" />
+                Show Facebook
+              </label>
+            </div>
+          </div>
+
           <label class="block">
             <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Email label</span>
             <input v-model="siteContent.contact.emailLabel" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
@@ -614,6 +636,36 @@
           <label class="block md:col-span-2">
             <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Instagram URL</span>
             <input v-model="siteContent.contact.instagramUrl" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Etsy label</span>
+            <input v-model="siteContent.contact.etsyLabel" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Etsy name</span>
+            <input v-model="siteContent.contact.etsyName" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Etsy URL</span>
+            <input v-model="siteContent.contact.etsyUrl" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Facebook label</span>
+            <input v-model="siteContent.contact.facebookLabel" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Facebook handle/name</span>
+            <input v-model="siteContent.contact.facebookHandle" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Facebook URL</span>
+            <input v-model="siteContent.contact.facebookUrl" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
           </label>
 
           <label class="block">
@@ -692,11 +744,21 @@ type SiteContent = {
   contact: {
     heading: string
     intro: string
+    showEmail: boolean
     emailLabel: string
     emailAddress: string
+    showInstagram: boolean
     instagramLabel: string
     instagramHandle: string
     instagramUrl: string
+    showEtsy: boolean
+    etsyLabel: string
+    etsyName: string
+    etsyUrl: string
+    showFacebook: boolean
+    facebookLabel: string
+    facebookHandle: string
+    facebookUrl: string
     image: string
     imageAlt: string
   }
@@ -741,11 +803,21 @@ const defaultSiteContent = (): SiteContent => ({
   contact: {
     heading: "Let's Connect",
     intro: '',
+    showEmail: true,
     emailLabel: 'Email:',
     emailAddress: '',
+    showInstagram: true,
     instagramLabel: 'Instagram:',
     instagramHandle: '@artandaboutpupkova',
     instagramUrl: 'https://www.instagram.com/artandaboutpupkova',
+    showEtsy: true,
+    etsyLabel: 'Etsy shop:',
+    etsyName: 'Art & About',
+    etsyUrl: 'https://www.etsy.com/shop/artandabout',
+    showFacebook: false,
+    facebookLabel: 'Facebook:',
+    facebookHandle: 'Art & About',
+    facebookUrl: '',
     image: '/images/tea3.jpeg',
     imageAlt: 'Tea Pupkova contact portrait'
   },

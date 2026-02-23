@@ -21,11 +21,21 @@ const defaultContent = {
   contact: {
     heading: "Let's Connect",
     intro: '',
+    showEmail: true,
     emailLabel: 'Email:',
     emailAddress: '',
+    showInstagram: true,
     instagramLabel: 'Instagram:',
     instagramHandle: '@artandaboutpupkova',
     instagramUrl: 'https://www.instagram.com/artandaboutpupkova',
+    showEtsy: true,
+    etsyLabel: 'Etsy shop:',
+    etsyName: 'Art & About',
+    etsyUrl: 'https://www.etsy.com/shop/artandabout',
+    showFacebook: false,
+    facebookLabel: 'Facebook:',
+    facebookHandle: 'Art & About',
+    facebookUrl: '',
     image: '/images/tea3.jpeg',
     imageAlt: 'Tea Pupkova contact portrait'
   },
@@ -58,6 +68,10 @@ export default defineEventHandler(async (event) => {
     content: {
       ...defaultContent,
       ...(parsed || {}),
+      contact: {
+        ...defaultContent.contact,
+        ...(parsed?.contact || {})
+      },
       testimonials: {
         ...defaultContent.testimonials,
         ...(parsed?.testimonials || {}),

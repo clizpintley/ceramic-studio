@@ -25,7 +25,7 @@
         </template>
         <div class="flex items-center gap-2 md:gap-3">
           <a
-            href="https://www.etsy.com/shop/artandabout"
+            :href="etsyUrl"
             target="_blank"
             rel="noopener noreferrer"
             class="link-fx btn-primary !bg-[#F37F61] !border-[#F37F61] hover:!bg-[#E56F54] hover:!border-[#E56F54] gap-1.5 px-3 md:px-4 text-sm md:text-base"
@@ -58,12 +58,20 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 import { useMainNavigation } from '../composables/useMainNavigation'
+import { useSiteContent } from '../composables/useSiteContent'
 
 const route = useRoute()
 const navLinks = useMainNavigation()
+const content = await useSiteContent()
+
+const etsyUrl = computed(() => {
+  return content.contact.etsyUrl || 'https://www.etsy.com/shop/artandabout'
+})
 
 const isActive = (path: string) => {
-  return route.path === path || route.path.startsWith(`${path}/`)
+  const normalizedPath = String(path).split('#')[0]
+  return route.path === normalizedPath || route.path.startsWith(`${normalizedPath}/`)
 }
 </script>

@@ -4,6 +4,13 @@ import { list, put } from '@vercel/blob'
 
 const blobToken = process.env.BLOB_READ_WRITE_TOKEN || ''
 const isBlobEnabled = () => Boolean(blobToken)
+const isServerlessRuntime = () => Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME)
+
+const ensurePersistentWriteAvailable = () => {
+  if (!isBlobEnabled() && isServerlessRuntime()) {
+    throw new Error('CMS persistence is not configured for deployment. Set BLOB_READ_WRITE_TOKEN to enable Vercel Blob writes.')
+  }
+}
 
 export const allowedImageExtensions = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg'])
 
@@ -43,12 +50,14 @@ export const readJsonData = async ({ localPath, blobKey, fallback }) => {
 }
 
 export const writeJsonData = async ({ localPath, blobKey, data }) => {
+  ensurePersistentWriteAvailable()
   const payload = JSON.stringify(data, null, 2)
 
   if (isBlobEnabled()) {
     await put(blobKey, payload, {
       access: 'public',
-      addRandomSuffix: true,
+      addRandomSuffix: false,
+      allowOverwrite: true,
       contentType: 'application/json',
       token: blobToken
     })
@@ -96,6 +105,7 @@ const sanitizeBaseName = (name) => {
 }
 
 export const uploadCmsImage = async (filePart) => {
+  ensurePersistentWriteAvailable()
   const extension = extname(filePart.filename || '').toLowerCase()
   if (!allowedImageExtensions.has(extension)) {
     throw new Error('Unsupported image format.')

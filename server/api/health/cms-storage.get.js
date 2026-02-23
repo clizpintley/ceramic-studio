@@ -18,6 +18,8 @@ export default defineEventHandler(async (event) => {
   }
 
   const blobEnabled = Boolean(process.env.BLOB_READ_WRITE_TOKEN)
+  const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME)
+  const persistenceConfigured = blobEnabled || !isServerless
 
   const productsData = await readJsonData({
     localPath: join(process.cwd(), 'data', 'products.json'),
@@ -36,6 +38,10 @@ export default defineEventHandler(async (event) => {
     auth: true,
     storage: blobEnabled ? 'vercel-blob' : 'local-filesystem',
     blobTokenConfigured: blobEnabled,
+    persistenceConfigured,
+    warning: persistenceConfigured
+      ? undefined
+      : 'Deployment is running in serverless mode without BLOB_READ_WRITE_TOKEN. CMS writes will not persist.',
     checks: {
       productsReadable: Array.isArray(productsData?.products),
       siteContentReadable: Boolean(contentData && typeof contentData === 'object')

@@ -6,7 +6,7 @@
       <div class="mx-4 h-2 w-2 rounded-full bg-[#D75641]"></div>
       <div class="h-px flex-1 bg-[#F8D6B4]"></div>
     </div>
-    <ProductsSection class="reveal-item" />
+    <ProductsSection class="reveal-item" :max-items="6" show-more-link />
     <div class="reveal-item reveal-divider my-10 flex items-center" aria-hidden="true">
       <div class="h-px flex-1 bg-[#F8D6B4]"></div>
       <div class="mx-4 h-2 w-2 rounded-full bg-[#D75641]"></div>
@@ -19,6 +19,18 @@
       <div class="h-px flex-1 bg-[#F8D6B4]"></div>
     </div>
     <BehindTheScenesSection class="reveal-item" />
+    <div class="reveal-item reveal-divider my-10 flex items-center" aria-hidden="true">
+      <div class="h-px flex-1 bg-[#F8D6B4]"></div>
+      <div class="mx-4 h-2 w-2 rounded-full bg-[#D75641]"></div>
+      <div class="h-px flex-1 bg-[#F8D6B4]"></div>
+    </div>
+    <TestimonialsSection class="reveal-item" />
+    <div class="reveal-item reveal-divider my-10 flex items-center" aria-hidden="true">
+      <div class="h-px flex-1 bg-[#F8D6B4]"></div>
+      <div class="mx-4 h-2 w-2 rounded-full bg-[#D75641]"></div>
+      <div class="h-px flex-1 bg-[#F8D6B4]"></div>
+    </div>
+    <InstagramLatestSection class="reveal-item" />
     <div class="reveal-item reveal-divider my-10 flex items-center" aria-hidden="true">
       <div class="h-px flex-1 bg-[#F8D6B4]"></div>
       <div class="mx-4 h-2 w-2 rounded-full bg-[#D75641]"></div>

@@ -1,6 +1,7 @@
 {
   "name": "ceramic-artist-portfolio",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "nuxi dev",

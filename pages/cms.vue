@@ -101,7 +101,15 @@
             class="rounded-2xl border border-[#FFE083] bg-[#FFF8DC] p-4"
           >
             <div class="flex items-center justify-between mb-4">
-              <h2 class="text-lg font-semibold text-[#9C4E3A]">Product #{{ item.index + 1 }}</h2>
+              <h2 class="text-lg font-semibold text-[#9C4E3A]">
+                Product #{{ item.index + 1 }}
+                <span
+                  v-if="item.product.featured"
+                  class="ml-2 inline-flex items-center rounded-full border border-[#FFCB06] bg-[#FFF1B3] px-2 py-0.5 text-xs font-semibold text-[#9C4E3A]"
+                >
+                  Featured
+                </span>
+              </h2>
               <button
                 type="button"
                 class="text-sm px-3 py-1.5 rounded-lg bg-[#F37F61] text-white hover:bg-[#E56F54] transition"
@@ -169,6 +177,23 @@
                   class="w-full rounded-lg border px-3 py-2 bg-white"
                   :class="hasFieldError(item.index, 'price') ? 'border-red-500' : 'border-[#FFE083]'"
                 />
+              </label>
+
+              <label class="block">
+                <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Availability</span>
+                <select v-model="item.product.availability" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white">
+                  <option v-for="availability in availabilityOptions" :key="`${item.product.id}-${availability}`" :value="availability">
+                    {{ formatAvailabilityLabel(availability) }}
+                  </option>
+                </select>
+              </label>
+
+              <label class="block md:col-span-2">
+                <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Homepage visibility</span>
+                <label class="inline-flex items-center gap-2 text-gray-700">
+                  <input v-model="item.product.featured" type="checkbox" class="h-4 w-4 rounded border-[#FFE083] text-[#D75641]" />
+                  Pin as featured (shows first in hero and at top of gallery)
+                </label>
               </label>
 
               <label class="block md:col-span-2">
@@ -388,7 +413,158 @@
         </div>
       </div>
 
-      <div v-else class="rounded-2xl border border-[#FFE083] bg-[#FFF8DC] p-5 md:p-6">
+      <div v-else-if="activeTab === 'testimonials'" class="rounded-2xl border border-[#FFE083] bg-[#FFF8DC] p-5 md:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <h2 class="text-2xl font-bold text-[#9C4E3A] font-display">Testimonials</h2>
+          <div class="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              class="bg-[#FFCB06] text-gray-800 px-4 py-2 rounded-lg border border-[#E6B800] font-medium"
+              @click="addTestimonial"
+            >
+              Add Review
+            </button>
+            <button
+              type="button"
+              class="bg-[#D75641] text-white px-4 py-2 rounded-lg hover:bg-[#C54D39] transition font-medium"
+              :disabled="isContentSaving"
+              @click="saveSiteContent"
+            >
+              {{ isContentSaving ? 'Saving...' : 'Save Testimonials' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Heading</span>
+            <input v-model="siteContent.testimonials.heading" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Intro</span>
+            <textarea v-model="siteContent.testimonials.intro" rows="3" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white"></textarea>
+          </label>
+        </div>
+
+        <div class="space-y-3">
+          <div
+            v-for="(review, index) in siteContent.testimonials.items"
+            :key="`testimonial-${index}`"
+            class="rounded-lg border border-[#FFE083] bg-white p-3"
+          >
+            <div class="flex items-center justify-between gap-3 mb-3">
+              <h3 class="text-sm font-semibold text-[#9C4E3A]">Review #{{ index + 1 }}</h3>
+              <button
+                type="button"
+                class="text-sm px-3 py-1.5 rounded-lg bg-[#F37F61] text-white hover:bg-[#E56F54] transition"
+                @click="removeTestimonial(index)"
+              >
+                Remove
+              </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <label class="block">
+                <span class="block text-xs text-[#9C4E3A] mb-1 font-medium">Name</span>
+                <input v-model="review.name" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+              </label>
+              <label class="block">
+                <span class="block text-xs text-[#9C4E3A] mb-1 font-medium">Rating</span>
+                <select v-model.number="review.rating" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white">
+                  <option :value="5">5 stars</option>
+                  <option :value="4">4 stars</option>
+                  <option :value="3">3 stars</option>
+                  <option :value="2">2 stars</option>
+                  <option :value="1">1 star</option>
+                </select>
+              </label>
+              <label class="block md:col-span-2">
+                <span class="block text-xs text-[#9C4E3A] mb-1 font-medium">Review text</span>
+                <textarea v-model="review.text" rows="3" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white"></textarea>
+              </label>
+              <label class="inline-flex items-center gap-2 text-sm text-gray-700 md:col-span-2">
+                <input v-model="review.approved" type="checkbox" class="h-4 w-4 rounded border-[#FFE083] text-[#D75641]" />
+                Approved (visible on homepage)
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-else-if="activeTab === 'instagram'" class="rounded-2xl border border-[#FFE083] bg-[#FFF8DC] p-5 md:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <h2 class="text-2xl font-bold text-[#9C4E3A] font-display">Instagram / Latest Posts</h2>
+          <div class="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              class="bg-[#FFCB06] text-gray-800 px-4 py-2 rounded-lg border border-[#E6B800] font-medium"
+              @click="addInstagramPost"
+            >
+              Add Post
+            </button>
+            <button
+              type="button"
+              class="bg-[#D75641] text-white px-4 py-2 rounded-lg hover:bg-[#C54D39] transition font-medium"
+              :disabled="isContentSaving"
+              @click="saveSiteContent"
+            >
+              {{ isContentSaving ? 'Saving...' : 'Save Instagram' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Heading</span>
+            <input v-model="siteContent.instagram.heading" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Intro</span>
+            <textarea v-model="siteContent.instagram.intro" rows="3" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white"></textarea>
+          </label>
+
+          <label class="block md:col-span-2">
+            <span class="block text-sm text-[#9C4E3A] mb-1 font-medium">Instagram Profile URL</span>
+            <input v-model="siteContent.instagram.profileUrl" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+          </label>
+        </div>
+
+        <div class="space-y-3">
+          <div
+            v-for="(post, index) in siteContent.instagram.posts"
+            :key="`insta-post-${index}`"
+            class="rounded-lg border border-[#FFE083] bg-white p-3"
+          >
+            <div class="flex items-center justify-between gap-3 mb-3">
+              <h3 class="text-sm font-semibold text-[#9C4E3A]">Post #{{ index + 1 }}</h3>
+              <button
+                type="button"
+                class="text-sm px-3 py-1.5 rounded-lg bg-[#F37F61] text-white hover:bg-[#E56F54] transition"
+                @click="removeInstagramPost(index)"
+              >
+                Remove
+              </button>
+            </div>
+            <div class="grid grid-cols-1 gap-2">
+              <label class="block">
+                <span class="block text-xs text-[#9C4E3A] mb-1 font-medium">Post URL</span>
+                <input v-model="post.url" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" placeholder="https://www.instagram.com/p/.../" />
+              </label>
+              <label class="block">
+                <span class="block text-xs text-[#9C4E3A] mb-1 font-medium">Caption (optional)</span>
+                <input v-model="post.caption" class="w-full rounded-lg border border-[#FFE083] px-3 py-2 bg-white" />
+              </label>
+              <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+                <input v-model="post.enabled" type="checkbox" class="h-4 w-4 rounded border-[#FFE083] text-[#D75641]" />
+                Enabled (visible on homepage)
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-else-if="activeTab === 'contact'" class="rounded-2xl border border-[#FFE083] bg-[#FFF8DC] p-5 md:p-6">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
           <h2 class="text-2xl font-bold text-[#9C4E3A] font-display">Contact</h2>
           <button
@@ -487,6 +663,8 @@ type Product = {
   description: string
   price: number
   image: string
+  featured: boolean
+  availability: 'in-stock' | 'made-to-order' | 'sold' | 'limited-edition'
 }
 
 type SiteContent = {
@@ -519,6 +697,26 @@ type SiteContent = {
     image: string
     imageAlt: string
   }
+  testimonials: {
+    heading: string
+    intro: string
+    items: Array<{
+      name: string
+      rating: number
+      text: string
+      approved: boolean
+    }>
+  }
+  instagram: {
+    heading: string
+    intro: string
+    profileUrl: string
+    posts: Array<{
+      url: string
+      caption: string
+      enabled: boolean
+    }>
+  }
 }
 
 const defaultSiteContent = (): SiteContent => ({
@@ -547,13 +745,24 @@ const defaultSiteContent = (): SiteContent => ({
     instagramUrl: 'https://www.instagram.com/artandaboutpupkova',
     image: '/images/tea3.jpeg',
     imageAlt: 'Tea Pupkova contact portrait'
+  },
+  testimonials: {
+    heading: 'Kind Words',
+    intro: 'What collectors and customers are saying.',
+    items: []
+  },
+  instagram: {
+    heading: 'Latest from Instagram',
+    intro: 'Recent studio updates and finished pieces.',
+    profileUrl: 'https://www.instagram.com/artandaboutpupkova',
+    posts: []
   }
 })
 
 const passwordInput = ref('')
 const cmsPassword = ref('')
 const isAuthenticated = ref(false)
-const activeTab = ref<'products' | 'categories' | 'about' | 'behind' | 'contact'>('products')
+const activeTab = ref<'products' | 'categories' | 'about' | 'behind' | 'testimonials' | 'instagram' | 'contact'>('products')
 const isLoading = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
@@ -578,8 +787,19 @@ const cmsTabs = [
   { label: 'Categories', value: 'categories' as const },
   { label: 'About Me', value: 'about' as const },
   { label: 'Behind the Scenes', value: 'behind' as const },
+  { label: 'Testimonials', value: 'testimonials' as const },
+  { label: 'Instagram', value: 'instagram' as const },
   { label: 'Contact', value: 'contact' as const }
 ]
+
+const availabilityOptions: Array<Product['availability']> = ['in-stock', 'made-to-order', 'sold', 'limited-edition']
+
+const formatAvailabilityLabel = (availability: Product['availability']) => {
+  return availability
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
 
 const categoryOptions = computed(() => {
   return Array.from(new Set([
@@ -614,7 +834,14 @@ const filteredProducts = computed(() => {
         return true
       }
 
-      return [product.title, product.slug, product.id, product.short]
+      return [
+        product.title,
+        product.slug,
+        product.id,
+        product.short,
+        product.availability,
+        product.featured ? 'featured' : ''
+      ]
         .join(' ')
         .toLowerCase()
         .includes(query)
@@ -635,7 +862,11 @@ const loadProducts = async () => {
   const response = await $fetch<{ products: Product[] }>('/api/cms/products', {
     headers: makeHeaders()
   })
-  products.value = response.products || []
+  products.value = (response.products || []).map((product) => ({
+    ...product,
+    featured: Boolean(product.featured),
+    availability: availabilityOptions.includes(product.availability) ? product.availability : 'in-stock'
+  }))
   validationErrors.value = {}
 }
 
@@ -757,7 +988,9 @@ const addProduct = () => {
     short: 'Short product description',
     description: 'Detailed product description',
     price: 0,
-    image: '/images/logo.png'
+    image: '/images/logo.png',
+    featured: false,
+    availability: 'in-stock'
   })
 }
 
@@ -965,5 +1198,30 @@ const deleteCategory = (categoryToDelete: string) => {
 
 const getCategoryUsageCount = (category: string) => {
   return products.value.filter((product) => product.category === category).length
+}
+
+const addTestimonial = () => {
+  siteContent.value.testimonials.items.unshift({
+    name: 'Customer Name',
+    rating: 5,
+    text: 'Share a short customer review here.',
+    approved: true
+  })
+}
+
+const removeTestimonial = (index: number) => {
+  siteContent.value.testimonials.items.splice(index, 1)
+}
+
+const addInstagramPost = () => {
+  siteContent.value.instagram.posts.unshift({
+    url: 'https://www.instagram.com/p/POST_ID/',
+    caption: '',
+    enabled: true
+  })
+}
+
+const removeInstagramPost = (index: number) => {
+  siteContent.value.instagram.posts.splice(index, 1)
 }
 </script>

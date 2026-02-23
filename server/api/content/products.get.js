@@ -14,7 +14,16 @@ export default defineEventHandler(async (event) => {
     fallback: { products: [] }
   })
 
+  const allowedAvailability = ['in-stock', 'made-to-order', 'sold', 'limited-edition']
+  const products = Array.isArray(parsed?.products) ? parsed.products : []
+
   return {
-    products: Array.isArray(parsed?.products) ? parsed.products : []
+    products: products.map((product) => ({
+      ...product,
+      featured: Boolean(product?.featured),
+      availability: allowedAvailability.includes(String(product?.availability ?? '').trim())
+        ? String(product?.availability ?? '').trim()
+        : 'in-stock'
+    }))
   }
 })

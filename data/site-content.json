@@ -47,5 +47,46 @@
     "instagramUrl": "https://www.instagram.com/artandaboutpupkova",
     "image": "/images/tea3.jpeg",
     "imageAlt": "Tea Pupkova contact portrait"
+  },
+  "testimonials": {
+    "heading": "Kind Words",
+    "intro": "What collectors and customers are saying.",
+    "items": [
+      {
+        "name": "Customer Name",
+        "rating": 5,
+        "text": "Share a short customer review here.",
+        "approved": true
+      },
+      {
+        "name": "Nina P.",
+        "rating": 5,
+        "text": "The mug feels amazing in hand and the painting is even more beautiful in person.",
+        "approved": true
+      },
+      {
+        "name": "Alex M.",
+        "rating": 5,
+        "text": "Tea's ceramics add so much personality to our kitchen. Functional and full of character.",
+        "approved": true
+      }
+    ]
+  },
+  "instagram": {
+    "heading": "Latest from Instagram",
+    "intro": "Recent studio updates and finished pieces.",
+    "profileUrl": "https://www.instagram.com/artandaboutpupkova",
+    "posts": [
+      {
+        "url": "https://www.instagram.com/p/DVGK_VLDDPi/?img_index=1",
+        "caption": "Let's stay in bed",
+        "enabled": true
+      },
+      {
+        "url": "https://www.instagram.com/p/DU5K5i0jIuK/",
+        "caption": "Don't forget to have fun",
+        "enabled": true
+      }
+    ]
   }
 }

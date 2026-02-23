@@ -1,6 +1,16 @@
 {
   "products": [
     {
+      "id": "product-1771860679680",
+      "slug": "new-product-1771860679680",
+      "category": "drinkware",
+      "title": "New Product",
+      "short": "Short product description",
+      "description": "Detailed product description",
+      "price": 0,
+      "image": "/images/logo.png"
+    },
+    {
       "id": "fs",
       "slug": "new-product-1771857709275",
       "category": "drinkware",

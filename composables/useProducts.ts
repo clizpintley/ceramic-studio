@@ -10,6 +10,8 @@ export type Product = {
   description: string
   price: number
   image: string
+  featured: boolean
+  availability: 'in-stock' | 'made-to-order' | 'sold' | 'limited-edition'
 }
 
 export const useProducts = async () => {
@@ -20,8 +22,12 @@ export const useProducts = async () => {
     const response = await $fetch<{ products: Product[] }>('/api/content/products')
     productsState.value = (response.products ?? []).map((product) => ({
       ...product,
-      price: Number(product.price)
-    }))
+      price: Number(product.price),
+      featured: Boolean(product.featured),
+      availability: ['in-stock', 'made-to-order', 'sold', 'limited-edition'].includes(String(product.availability))
+        ? (product.availability as Product['availability'])
+        : 'in-stock'
+    })).sort((a, b) => Number(b.featured) - Number(a.featured))
   } catch {
     if (!productsState.value.length) {
       productsState.value = fallbackProducts

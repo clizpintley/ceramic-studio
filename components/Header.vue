@@ -1,7 +1,7 @@
 <template>
   <header class="bg-[#FFCB06] shadow-sm sticky top-0 z-50 border-b border-[#E6B800]">
     <div class="container px-4 py-3 md:py-5">
-      <div class="flex flex-col items-center gap-3 md:flex-row md:justify-center md:gap-6">
+      <div class="flex flex-col items-center gap-3 md:flex-row md:justify-center md:gap-7">
         <nuxt-link to="/" class="link-fx flex items-center space-x-3 hover:opacity-80 transition">
         <img src="/images/logo.png" alt="Art and About logo" class="h-14 w-14 md:h-20 md:w-20 object-contain" />
         <span class="text-2xl font-bold text-gray-800 whitespace-nowrap">
@@ -11,28 +11,32 @@
       <nav class="w-full md:w-auto flex flex-wrap items-center justify-center gap-x-6 md:gap-x-8 gap-y-2 text-[15px] md:text-base">
         <nuxt-link 
           to="/gallery" 
-          class="link-fx text-gray-800 hover:text-[#9C4E3A] font-medium transition"
+          class="link-fx px-1 py-1 rounded text-gray-800 hover:text-[#9C4E3A] font-medium transition"
+          :class="isActive('/gallery') ? 'text-[#9C4E3A] underline underline-offset-4 decoration-[#9C4E3A]/50' : ''"
         >
           My Products
         </nuxt-link>
         <span class="hidden md:inline-block h-1.5 w-1.5 rounded-full bg-[#9C4E3A]/30" aria-hidden="true"></span>
         <nuxt-link 
           to="/behind-the-scenes" 
-          class="link-fx text-gray-800 hover:text-[#9C4E3A] font-medium transition"
+          class="link-fx px-1 py-1 rounded text-gray-800 hover:text-[#9C4E3A] font-medium transition"
+          :class="isActive('/behind-the-scenes') ? 'text-[#9C4E3A] underline underline-offset-4 decoration-[#9C4E3A]/50' : ''"
         >
           Behind the Scenes
         </nuxt-link>
         <span class="hidden md:inline-block h-1.5 w-1.5 rounded-full bg-[#9C4E3A]/30" aria-hidden="true"></span>
         <nuxt-link 
           to="/about" 
-          class="link-fx text-gray-800 hover:text-[#9C4E3A] font-medium transition"
+          class="link-fx px-1 py-1 rounded text-gray-800 hover:text-[#9C4E3A] font-medium transition"
+          :class="isActive('/about') ? 'text-[#9C4E3A] underline underline-offset-4 decoration-[#9C4E3A]/50' : ''"
         >
           About Me
         </nuxt-link>
         <span class="hidden md:inline-block h-1.5 w-1.5 rounded-full bg-[#9C4E3A]/30" aria-hidden="true"></span>
         <nuxt-link 
           to="/contact" 
-          class="link-fx text-gray-800 hover:text-[#9C4E3A] font-medium transition"
+          class="link-fx px-1 py-1 rounded text-gray-800 hover:text-[#9C4E3A] font-medium transition"
+          :class="isActive('/contact') ? 'text-[#9C4E3A] underline underline-offset-4 decoration-[#9C4E3A]/50' : ''"
         >
           Contact
         </nuxt-link>
@@ -41,7 +45,7 @@
             href="https://www.etsy.com/shop/artandabout"
             target="_blank"
             rel="noopener noreferrer"
-            class="link-fx inline-flex items-center gap-1.5 bg-[#F37F61] text-white px-3 md:px-4 py-2 rounded-lg hover:bg-[#E56F54] transition text-sm md:text-base font-medium"
+            class="link-fx btn-primary !bg-[#F37F61] !border-[#F37F61] hover:!bg-[#E56F54] hover:!border-[#E56F54] gap-1.5 px-3 md:px-4 text-sm md:text-base"
           >
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
               <path d="M6 8.5h12l-1.2 9H7.2L6 8.5z" />
@@ -53,7 +57,7 @@
           <button
             type="button"
             disabled
-            class="inline-flex items-center gap-1.5 bg-[#F37F61] text-white px-3 md:px-4 py-2 rounded-lg opacity-60 cursor-not-allowed text-sm md:text-base font-medium"
+            class="btn-primary !bg-[#F37F61] !border-[#F37F61] inline-flex items-center gap-1.5 px-3 md:px-4 opacity-60 cursor-not-allowed text-sm md:text-base"
           >
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
               <circle cx="9" cy="19" r="1.5" />
@@ -68,3 +72,13 @@
     </div>
   </header>
 </template>
+
+<script setup lang="ts">
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const isActive = (path: string) => {
+  return route.path === path || route.path.startsWith(`${path}/`)
+}
+</script>

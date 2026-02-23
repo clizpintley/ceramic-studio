@@ -31,6 +31,17 @@ const defaultContent = {
     instagramUrl: 'https://www.instagram.com/artandaboutpupkova',
     image: '/images/tea3.jpeg',
     imageAlt: 'Tea Pupkova contact portrait'
+  },
+  testimonials: {
+    heading: 'Kind Words',
+    intro: 'What collectors and customers are saying.',
+    items: []
+  },
+  instagram: {
+    heading: 'Latest from Instagram',
+    intro: 'Recent studio updates and finished pieces.',
+    profileUrl: 'https://www.instagram.com/artandaboutpupkova',
+    posts: []
   }
 }
 
@@ -65,6 +76,23 @@ const normalize = (content) => {
     ? content.about.paragraphs.map((paragraph) => String(paragraph ?? '').trim())
     : []
 
+  const testimonials = Array.isArray(content?.testimonials?.items)
+    ? content.testimonials.items.map((item) => ({
+        name: String(item?.name ?? '').trim(),
+        rating: Math.max(1, Math.min(5, Number(item?.rating ?? 5))),
+        text: String(item?.text ?? '').trim(),
+        approved: Boolean(item?.approved)
+      }))
+    : []
+
+  const instagramPosts = Array.isArray(content?.instagram?.posts)
+    ? content.instagram.posts.map((post) => ({
+        url: String(post?.url ?? '').trim(),
+        caption: String(post?.caption ?? '').trim(),
+        enabled: post?.enabled !== false
+      }))
+    : []
+
   return {
     about: {
       heading: String(content?.about?.heading ?? defaultContent.about.heading).trim(),
@@ -91,6 +119,17 @@ const normalize = (content) => {
       instagramUrl: String(content?.contact?.instagramUrl ?? defaultContent.contact.instagramUrl).trim(),
       image: String(content?.contact?.image ?? defaultContent.contact.image).trim(),
       imageAlt: String(content?.contact?.imageAlt ?? defaultContent.contact.imageAlt).trim()
+    },
+    testimonials: {
+      heading: String(content?.testimonials?.heading ?? defaultContent.testimonials.heading).trim(),
+      intro: String(content?.testimonials?.intro ?? defaultContent.testimonials.intro).trim(),
+      items: testimonials.filter((item) => item.text)
+    },
+    instagram: {
+      heading: String(content?.instagram?.heading ?? defaultContent.instagram.heading).trim(),
+      intro: String(content?.instagram?.intro ?? defaultContent.instagram.intro).trim(),
+      profileUrl: String(content?.instagram?.profileUrl ?? defaultContent.instagram.profileUrl).trim(),
+      posts: instagramPosts.filter((post) => post.url)
     }
   }
 }

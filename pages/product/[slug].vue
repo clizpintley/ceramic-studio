@@ -8,6 +8,9 @@
       </div>
       <div>
         <h1 class="text-2xl font-bold text-[#9C4E3A] font-display">{{ product.title }}</h1>
+        <span class="mt-2 inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold" :class="availabilityClass(product.availability)">
+          {{ availabilityLabel(product.availability) }}
+        </span>
         <p class="text-gray-600 mt-2">{{ product.description }}</p>
         <div class="mt-6 flex items-center justify-between">
           <div class="text-2xl font-extrabold text-[#9C4E3A]">€{{ product.price }}</div>
@@ -37,6 +40,29 @@ const { products } = await useProducts()
 const route = useRoute()
 const slug = route.params.slug as string
 const product = products.find((p: any) => p.slug === slug)
+
+const availabilityLabel = (availability: string) => {
+  return String(availability || 'in-stock')
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
+const availabilityClass = (availability: string) => {
+  if (availability === 'sold') {
+    return 'bg-[#F3E9DD] text-[#9C4E3A] border border-[#FFE083]'
+  }
+
+  if (availability === 'made-to-order') {
+    return 'bg-[#F8D6B4] text-[#9C4E3A] border border-[#FFE083]'
+  }
+
+  if (availability === 'limited-edition') {
+    return 'bg-[#FFF1B3] text-[#9C4E3A] border border-[#FFCB06]'
+  }
+
+  return 'bg-[#FFF8DC] text-[#9C4E3A] border border-[#FFE083]'
+}
 
 onMounted(async () => {
   if (!product) return

@@ -31,6 +31,26 @@ export type SiteContent = {
     image: string
     imageAlt: string
   }
+  testimonials: {
+    heading: string
+    intro: string
+    items: Array<{
+      name: string
+      rating: number
+      text: string
+      approved: boolean
+    }>
+  }
+  instagram: {
+    heading: string
+    intro: string
+    profileUrl: string
+    posts: Array<{
+      url: string
+      caption: string
+      enabled: boolean
+    }>
+  }
 }
 
 const defaultFallbackContent: SiteContent = {
@@ -59,6 +79,17 @@ const defaultFallbackContent: SiteContent = {
     instagramUrl: 'https://www.instagram.com/artandaboutpupkova',
     image: '/images/tea3.jpeg',
     imageAlt: 'Tea Pupkova contact portrait'
+  },
+  testimonials: {
+    heading: 'Kind Words',
+    intro: 'What collectors and customers are saying.',
+    items: []
+  },
+  instagram: {
+    heading: 'Latest from Instagram',
+    intro: 'Recent studio updates and finished pieces.',
+    profileUrl: 'https://www.instagram.com/artandaboutpupkova',
+    posts: []
   }
 }
 

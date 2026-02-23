@@ -4,6 +4,7 @@ import { readJsonData, writeJsonData } from '../../utils/cms-storage'
 
 const productsFilePath = join(process.cwd(), 'data', 'products.json')
 const productsBlobKey = 'cms/data/products.json'
+const allowedAvailability = ['in-stock', 'made-to-order', 'sold', 'limited-edition']
 
 const requireCmsAuth = (event) => {
   const config = useRuntimeConfig(event)
@@ -32,7 +33,11 @@ const normalizeProduct = (product) => ({
   short: String(product?.short ?? '').trim(),
   description: String(product?.description ?? '').trim(),
   price: Number(product?.price ?? 0),
-  image: String(product?.image ?? '').trim()
+  image: String(product?.image ?? '').trim(),
+  featured: Boolean(product?.featured),
+  availability: allowedAvailability.includes(String(product?.availability ?? '').trim())
+    ? String(product?.availability ?? '').trim()
+    : 'in-stock'
 })
 
 const validateProduct = (product, index) => {
@@ -52,6 +57,10 @@ const validateProduct = (product, index) => {
 
   if (!Number.isFinite(product.price) || product.price < 0) {
     errors.push('price must be a valid non-negative number')
+  }
+
+  if (!allowedAvailability.includes(product.availability)) {
+    errors.push(`availability must be one of: ${allowedAvailability.join(', ')}`)
   }
 
   if (errors.length > 0) {

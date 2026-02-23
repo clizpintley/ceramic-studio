@@ -95,7 +95,9 @@ const introSlide = {
   isIntro: true
 }
 
-const slides = [introSlide, ...products.map((product: any) => ({ ...product, isIntro: false }))]
+const featuredProducts = products.filter((product: any) => Boolean(product.featured))
+const heroProducts = featuredProducts.length ? featuredProducts : products
+const slides = [introSlide, ...heroProducts.map((product: any) => ({ ...product, isIntro: false }))]
 const activeIndex = ref(0)
 const slideIntervalMs = 4500
 let timer: ReturnType<typeof setInterval> | null = null

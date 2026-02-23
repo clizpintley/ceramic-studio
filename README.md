@@ -1,4 +1,4 @@
-# Ceramic Artist Portfolio (Nuxt 3 + Tailwind + Snipcart)
+# Ceramic Artist Portfolio (Nuxt 3 + Tailwind)
 
 This is a starter portfolio and simple e-commerce site for a hand-painted ceramics artist.
 
@@ -16,34 +16,16 @@ npm install
 npm run dev
 ```
 
-3. Replace the Snipcart API key in `app.vue` at the `#snipcart` container with your Snipcart public API key.
-
 Notes
 
 - Products live in `data/products.json` (image files are under `/public/images` — add your images there).
 - For a production store consider Stripe/Shopify or adding server-side inventory management.
 
-Snipcart setup
+Cart status
 
-1. Create a `.env` file in the project root and add your Snipcart public API key:
-
-```bash
-SNIPCART_API_KEY=YOUR_PUBLIC_API_KEY_HERE
-```
-
-2. Start the dev server (Nuxt will expose the key to the client via runtime config):
-
-```bash
-npm run dev
-```
-
-3. Visit the site and use the "Add to cart" buttons. The Cart is available via the header "Cart" link or the Snipcart UI.
-
-4. When deploying, set the `SNIPCART_API_KEY` environment variable in your hosting provider (Netlify, Vercel, etc.).
-
-Notes about product URLs
-
-- Each product's `data-item-url` should resolve to the product page (the app uses relative paths). If you deploy under a subdirectory, update `data-item-url` values to be absolute.
+- Cart/checkout integration is currently disabled.
+- The product purchase buttons are shown as "Coming soon" placeholders.
+- No Snipcart API key is required for deployment in the current state.
 
 Chatbot email setup
 

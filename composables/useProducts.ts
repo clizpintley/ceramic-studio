@@ -17,7 +17,9 @@ export const useProducts = async () => {
   const productsLoadedState = useState<boolean>('products-loaded', () => false)
   const fallbackProducts: Product[] = []
 
-  if (!productsLoadedState.value) {
+  const shouldFetch = !productsLoadedState.value || productsState.value.length === 0
+
+  if (shouldFetch) {
     try {
       const response = await $fetch<{ products: Product[] }>('/api/content/products')
       productsState.value = (response.products ?? []).map((product) => ({
@@ -25,7 +27,9 @@ export const useProducts = async () => {
         price: Number(product.price)
       }))
     } catch {
-      productsState.value = fallbackProducts
+      if (!productsState.value.length) {
+        productsState.value = fallbackProducts
+      }
     } finally {
       productsLoadedState.value = true
     }

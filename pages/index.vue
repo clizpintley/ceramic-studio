@@ -6,13 +6,13 @@
       <div class="mx-4 h-2 w-2 rounded-full bg-[#D75641]"></div>
       <div class="h-px flex-1 bg-[#F8D6B4]"></div>
     </div>
-    <ProductsSection class="reveal-item" :max-items="6" show-more-link />
+    <AboutSection class="reveal-item" />
     <div class="reveal-item reveal-divider my-10 flex items-center" aria-hidden="true">
       <div class="h-px flex-1 bg-[#F8D6B4]"></div>
       <div class="mx-4 h-2 w-2 rounded-full bg-[#D75641]"></div>
       <div class="h-px flex-1 bg-[#F8D6B4]"></div>
     </div>
-    <AboutSection class="reveal-item" />
+    <ProductsSection :max-items="6" show-more-link />
     <div class="reveal-item reveal-divider my-10 flex items-center" aria-hidden="true">
       <div class="h-px flex-1 bg-[#F8D6B4]"></div>
       <div class="mx-4 h-2 w-2 rounded-full bg-[#D75641]"></div>
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted } from 'vue'
 
 useHead({
   title: 'Art & About - Tea Pupkova',
@@ -53,9 +53,9 @@ useHead({
 })
 
 let revealObserver: IntersectionObserver | null = null
-let revealFallbackTimer: ReturnType<typeof setTimeout> | null = null
 
-onMounted(() => {
+onMounted(async () => {
+  await nextTick()
   const revealItems = document.querySelectorAll('.reveal-item')
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   const isMobile = window.matchMedia('(max-width: 767px)').matches
@@ -81,19 +81,11 @@ onMounted(() => {
   )
 
   revealItems.forEach((item) => revealObserver?.observe(item))
-
-  revealFallbackTimer = setTimeout(() => {
-    revealItems.forEach((item) => item.classList.add('is-visible'))
-  }, 1800)
 })
 
 onBeforeUnmount(() => {
   revealObserver?.disconnect()
   revealObserver = null
-  if (revealFallbackTimer) {
-    clearTimeout(revealFallbackTimer)
-    revealFallbackTimer = null
-  }
 })
 </script>
 

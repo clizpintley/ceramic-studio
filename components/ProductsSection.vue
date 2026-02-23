@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-16">
+  <div ref="sectionRef" class="mb-16">
     <div class="mb-8 md:mb-10">
       <h2 class="section-title text-4xl font-bold text-[#9C4E3A] mb-2 font-display">My Work</h2>
       <span class="inline-block mb-3 text-xs font-semibold tracking-wide uppercase bg-[#FFF1B3] text-[#9C4E3A] px-3 py-1 rounded-full border border-[#FFCB06]">
@@ -7,23 +7,32 @@
       </span>
       <p class="text-gray-700 leading-relaxed">Browse my complete collection of hand-painted ceramics</p>
     </div>
-    <div class="mb-8 flex flex-wrap gap-3">
-      <button
-        v-for="group in productGroups"
-        :key="group.value"
-        type="button"
-        @click="activeGroup = group.value"
-        class="link-fx px-4 py-2 rounded-lg border transition font-medium"
-        :class="activeGroup === group.value ? 'text-gray-800 shadow-sm' : 'text-[#9C4E3A] hover:bg-[#FFF1B3]'"
-        :style="activeGroup === group.value
-          ? { backgroundColor: '#FFCB06', borderColor: '#E6B800' }
-          : { backgroundColor: '#FFF8DC', borderColor: '#FFE083' }"
-      >
-        {{ group.label }}
-      </button>
-    </div>
+    <nav class="mb-8 border-b border-[#FFE083]" aria-label="Product categories">
+      <ul class="flex flex-wrap justify-center gap-x-6 gap-y-2 -mb-px">
+        <li v-for="group in productGroups" :key="group.value">
+          <a
+            href="#"
+            @click.prevent="activeGroup = group.value"
+            class="inline-flex items-center px-1 pt-2 pb-3 text-lg transition border-b-2"
+            :class="activeGroup === group.value
+              ? 'text-[#9C4E3A] border-[#D75641] font-semibold'
+              : 'text-[#9C4E3A]/75 border-transparent hover:text-[#9C4E3A] hover:border-[#FFCB06]/70'"
+          >
+            {{ group.label }}
+          </a>
+        </li>
+      </ul>
+    </nav>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      <ProductCard v-for="p in visibleProducts" :key="p.id" :product="p" />
+      <div
+        v-for="(p, index) in visibleProducts"
+        :key="p.id"
+        class="product-reveal"
+        :class="visible ? 'is-visible' : ''"
+        :style="{ '--delay': `${120 + index * 110}ms` }"
+      >
+        <ProductCard :product="p" />
+      </div>
     </div>
     <p v-if="visibleProducts.length === 0" class="text-gray-600 mt-6">
       No products found in this category.
@@ -41,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import ProductCard from './ProductCard.vue'
 import { useProducts } from '../composables/useProducts'
 
@@ -54,6 +63,9 @@ const props = withDefaults(defineProps<{
 })
 
 const { products } = await useProducts()
+const sectionRef = ref<HTMLElement | null>(null)
+const visible = ref(false)
+let observer: IntersectionObserver | null = null
 
 const formatCategoryLabel = (category: string) => {
   return category
@@ -113,4 +125,55 @@ const activeLabel = computed(() => {
   const selected = productGroups.value.find((group) => group.value === activeGroup.value)
   return selected?.label ?? 'Products'
 })
+
+onMounted(() => {
+  if (!sectionRef.value) {
+    visible.value = true
+    return
+  }
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        visible.value = true
+        observer?.disconnect()
+        observer = null
+      }
+    },
+    {
+      threshold: 0.1,
+      rootMargin: '0px 0px -8% 0px'
+    }
+  )
+
+  observer.observe(sectionRef.value)
+})
+
+onBeforeUnmount(() => {
+  observer?.disconnect()
+  observer = null
+})
 </script>
+
+<style scoped>
+.product-reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 520ms ease, transform 520ms ease;
+  transition-delay: var(--delay, 0ms);
+}
+
+.product-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-reveal,
+  .product-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+</style>

@@ -2,7 +2,10 @@
   <div id="contact-section" class="mb-8 scroll-mt-28">
     <h2 class="text-4xl font-bold text-[#9C4E3A] mb-6 font-display">{{ content.contact.heading }}</h2>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-      <div class="w-full bg-[#F8D6B4] p-8 rounded-lg border border-[#F8D6B4]">
+      <div class="contact-bubble relative w-full bg-[#F8D6B4] p-8 md:p-9 rounded-[2.5rem] border border-[#FFCB06]/45">
+        <span class="contact-bubble-tail pointer-events-none absolute right-8 -bottom-3 h-6 w-6 rotate-45 rounded-[0.4rem] bg-[#F8D6B4] border-r border-b border-[#FFCB06]/45" aria-hidden="true"></span>
+        <span class="pointer-events-none absolute -top-3 right-10 h-3.5 w-3.5 rounded-full bg-[#FFF1B3] border border-[#FFCB06]" aria-hidden="true"></span>
+        <span class="pointer-events-none absolute top-4 right-5 h-2.5 w-2.5 rounded-full bg-[#FFCB06]/55" aria-hidden="true"></span>
         <p class="text-lg text-gray-700 mb-6">
           {{ content.contact.intro }}
         </p>
@@ -64,3 +67,13 @@ import { useSiteContent } from '../composables/useSiteContent'
 
 const content = await useSiteContent()
 </script>
+
+<style scoped>
+.contact-bubble {
+  box-shadow: 0 12px 24px rgba(156, 78, 58, 0.1);
+}
+
+.contact-bubble-tail {
+  box-shadow: 3px 3px 10px rgba(156, 78, 58, 0.08);
+}
+</style>

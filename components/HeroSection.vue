@@ -6,70 +6,52 @@
         :alt="activeSlide.title"
         class="absolute inset-0 h-full w-full object-cover"
       />
-      <div class="absolute inset-0 bg-[#F8D6B4]/75"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10"></div>
 
-      <div class="relative z-10 h-full px-5 md:px-8 py-10 md:py-14 flex flex-col justify-between">
-        <div class="text-center">
-          <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#9C4E3A] mb-4 font-display">
-            {{ activeSlide.isIntro ? "Hello, I'm Tea Pupkova" : 'Product Gallery' }}
-          </h1>
-          <p class="text-lg md:text-xl text-gray-700">
-            {{ activeSlide.isIntro ? 'I create hand-painted ceramics that turn everyday moments into art.' : 'Browse featured pieces from my hand-painted collection.' }}
-          </p>
-        </div>
+      <div class="absolute inset-y-0 left-0 right-0 z-10 flex items-center justify-between px-4 md:px-6 pointer-events-none">
+        <button
+          type="button"
+          @click="prevSlide"
+          class="pointer-events-auto link-fx h-10 w-10 md:h-11 md:w-11 rounded-full border border-[#FFCB06] bg-[#FFF8EE]/90 text-[#9C4E3A] text-sm font-semibold hover:bg-[#FFF1B3] transition"
+          aria-label="Previous slide"
+        >
+          ‹
+        </button>
 
-        <div class="mx-auto w-full max-w-2xl text-center rounded-2xl bg-[#FFF8EE]/85 p-5 md:p-7">
-          <h2 v-if="!activeSlide.isIntro" class="text-2xl md:text-3xl font-bold text-[#9C4E3A] font-display mb-2">{{ activeSlide.title }}</h2>
-          <p class="text-gray-700 mb-5">{{ activeSlide.short }}</p>
-          <p v-if="activeSlide.description" class="text-gray-600 text-base md:text-lg mb-5">{{ activeSlide.description }}</p>
+        <button
+          type="button"
+          @click="nextSlide"
+          class="pointer-events-auto link-fx h-10 w-10 md:h-11 md:w-11 rounded-full border border-[#FFCB06] bg-[#FFF8EE]/90 text-[#9C4E3A] text-sm font-semibold hover:bg-[#FFF1B3] transition"
+          aria-label="Next slide"
+        >
+          ›
+        </button>
+      </div>
 
-          <div v-if="activeSlide.isIntro" class="flex items-center justify-center gap-3">
-            <nuxt-link
-              to="/gallery"
-              class="inline-block bg-[#D75641] text-white px-6 py-2.5 rounded-lg hover:bg-[#C54D39] transition font-semibold"
+      <div class="relative z-10 h-full px-5 md:px-8 py-6 md:py-8 flex flex-col justify-end">
+        <div class="w-full rounded-2xl border border-[#FFCB06]/65 bg-[#FFF8EE]/82 backdrop-blur-sm p-3 md:p-4 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3 md:gap-4 min-w-0">
+            <button
+              type="button"
+              @click="goToGallery"
+              class="link-fx bg-[#FFF8EE] text-[#9C4E3A] border border-[#FFCB06] rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap"
             >
-              Explore My Work
-            </nuxt-link>
+              Browse Gallery
+            </button>
+
+            <div class="text-sm font-semibold text-[#9C4E3A] whitespace-nowrap">
+              {{ activeIndex + 1 }} / {{ slides.length }}
+            </div>
           </div>
 
-          <div v-else class="flex items-center justify-center gap-3">
+          <div class="flex items-center gap-2">
             <nuxt-link
               :to="`/product/${activeSlide.slug}`"
-              class="inline-block bg-[#D75641] text-white px-6 py-2.5 rounded-lg hover:bg-[#C54D39] transition font-semibold"
+              class="inline-flex items-center rounded-full bg-[#D75641] text-white px-4 py-2 text-sm font-semibold hover:bg-[#C54D39] transition whitespace-nowrap"
             >
-              View Product
-            </nuxt-link>
-            <nuxt-link
-              to="/gallery"
-              class="inline-block bg-[#FFF1B3] text-[#9C4E3A] border border-[#FFCB06] px-6 py-2.5 rounded-lg hover:bg-[#FFE487] transition font-semibold"
-            >
-              Browse All
+              View Piece
             </nuxt-link>
           </div>
-        </div>
-
-        <div class="flex items-center justify-between mt-6">
-          <button
-            type="button"
-            @click="prevSlide"
-            class="link-fx bg-[#FFF8EE]/90 text-[#9C4E3A] border border-[#FFCB06] rounded-full px-4 py-2 font-semibold"
-            aria-label="Previous slide"
-          >
-            Prev
-          </button>
-
-          <div class="text-sm md:text-base font-semibold text-[#9C4E3A] bg-[#FFF8EE]/90 border border-[#FFCB06] rounded-full px-4 py-2">
-            {{ activeIndex + 1 }} / {{ slides.length }}
-          </div>
-
-          <button
-            type="button"
-            @click="nextSlide"
-            class="link-fx bg-[#FFF8EE]/90 text-[#9C4E3A] border border-[#FFCB06] rounded-full px-4 py-2 font-semibold"
-            aria-label="Next slide"
-          >
-            Next
-          </button>
         </div>
       </div>
     </div>
@@ -82,34 +64,62 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useProducts } from '../composables/useProducts'
 
 const { products } = await useProducts()
-const introSlide = {
-  id: 'intro-slide',
-  image: '/images/tea2.jpeg',
-  title: "Hello, I'm Tea Pupkova",
-  short: 'From mugs and teapots to bowls and custom pieces, I shape functional pottery and illustrate each surface by hand—often inspired by stories, characters, and warm home rituals.',
-  description: 'Every piece is made to be used, loved, and to add personality to daily life.',
-  isIntro: true
-}
+const featuredProducts = products.filter((product: any) => Boolean(product.featured) && Boolean(product.image))
+const fallbackProducts = products.filter((product: any) => Boolean(product.image))
+const slides = (featuredProducts.length ? featuredProducts : fallbackProducts).map((product: any) => ({
+  id: product.id,
+  slug: product.slug,
+  title: product.title,
+  image: product.image
+}))
 
-const maxHeroProducts = 3
-const featuredProducts = products.filter((product: any) => Boolean(product.featured))
-const heroProducts = (featuredProducts.length ? featuredProducts : products).slice(0, maxHeroProducts)
-const slides = [introSlide, ...heroProducts.map((product: any) => ({ ...product, isIntro: false }))]
 const activeIndex = ref(0)
+const history = ref<number[]>([])
+const randomTimer = ref<ReturnType<typeof setInterval> | null>(null)
+const randomIntervalMs = 4200
 
 const activeSlide = computed(() => slides[activeIndex.value])
 
+const pickRandomIndex = () => {
+  if (slides.length <= 1) return activeIndex.value
+  let nextIndex = activeIndex.value
+  while (nextIndex === activeIndex.value) {
+    nextIndex = Math.floor(Math.random() * slides.length)
+  }
+  return nextIndex
+}
+
 const nextSlide = () => {
   if (!slides.length) return
-  activeIndex.value = (activeIndex.value + 1) % slides.length
+  history.value.push(activeIndex.value)
+  activeIndex.value = pickRandomIndex()
 }
 
 const prevSlide = () => {
   if (!slides.length) return
-  activeIndex.value = (activeIndex.value - 1 + slides.length) % slides.length
+  const previousIndex = history.value.pop()
+  if (previousIndex === undefined) return
+  activeIndex.value = previousIndex
 }
+
+const goToGallery = () => {
+  return navigateTo('/gallery')
+}
+
+onMounted(() => {
+  if (slides.length <= 1) return
+  randomTimer.value = setInterval(() => {
+    nextSlide()
+  }, randomIntervalMs)
+})
+
+onBeforeUnmount(() => {
+  if (!randomTimer.value) return
+  clearInterval(randomTimer.value)
+  randomTimer.value = null
+})
 </script>

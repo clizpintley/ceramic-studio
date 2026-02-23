@@ -16,16 +16,15 @@
         :style="{ '--delay': `${500 + index * 320}ms` }"
       >
         <div
-          class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-          :style="{
-            backgroundImage: 'repeating-linear-gradient(135deg, rgba(156,78,58,0.1) 0px, rgba(156,78,58,0.1) 8px, rgba(255,241,179,0.06) 8px, rgba(255,241,179,0.06) 16px)'
-          }"
+          class="flower-overlay pointer-events-none absolute inset-0 opacity-45 transition-opacity duration-500 group-hover:opacity-20"
           aria-hidden="true"
         />
-        <h3 class="relative z-10 text-2xl font-bold text-[#9C4E3A] mb-3 font-display">{{ card.title }}</h3>
-        <p class="relative z-10 text-gray-700 leading-relaxed">
-          {{ card.text }}
-        </p>
+        <div class="relative z-10 rounded-xl bg-[#F8D6B4]/88 px-4 py-3 backdrop-blur-[1px]">
+          <h3 class="text-2xl font-bold text-[#9C4E3A] mb-3 font-display">{{ card.title }}</h3>
+          <p class="text-gray-800 leading-relaxed">
+            {{ card.text }}
+          </p>
+        </div>
       </div>
     </div>
     <p class="text-gray-700 mb-6 leading-relaxed">
@@ -91,6 +90,16 @@ onBeforeUnmount(() => {
 .reveal-step.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.flower-overlay {
+  background-size: 56px 56px;
+  background-image:
+    radial-gradient(circle at 18px 18px, rgba(156, 78, 58, 0.18) 0 5px, transparent 5px),
+    radial-gradient(circle at 30px 18px, rgba(156, 78, 58, 0.18) 0 5px, transparent 5px),
+    radial-gradient(circle at 24px 12px, rgba(156, 78, 58, 0.18) 0 5px, transparent 5px),
+    radial-gradient(circle at 24px 24px, rgba(156, 78, 58, 0.18) 0 5px, transparent 5px),
+    radial-gradient(circle at 24px 18px, rgba(255, 241, 179, 0.28) 0 2px, transparent 2px);
 }
 
 @media (prefers-reduced-motion: reduce) {

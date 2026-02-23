@@ -863,7 +863,8 @@ const makeHeaders = () => ({
 
 const loadProducts = async () => {
   const response = await $fetch<{ products: Product[] }>('/api/cms/products', {
-    headers: makeHeaders()
+    headers: makeHeaders(),
+    query: { _ts: Date.now() }
   })
   products.value = (response.products || []).map((product) => ({
     ...product,
@@ -875,21 +876,24 @@ const loadProducts = async () => {
 
 const loadImages = async () => {
   const response = await $fetch<{ images: string[] }>('/api/cms/images', {
-    headers: makeHeaders()
+    headers: makeHeaders(),
+    query: { _ts: Date.now() }
   })
   availableImages.value = response.images || []
 }
 
 const loadSiteContent = async () => {
   const response = await $fetch<{ content: SiteContent }>('/api/cms/site-content', {
-    headers: makeHeaders()
+    headers: makeHeaders(),
+    query: { _ts: Date.now() }
   })
   siteContent.value = response.content || defaultSiteContent()
 }
 
 const loadCategories = async () => {
   const response = await $fetch<{ categories: string[] }>('/api/cms/categories', {
-    headers: makeHeaders()
+    headers: makeHeaders(),
+    query: { _ts: Date.now() }
   })
   categories.value = response.categories || []
 }

@@ -19,7 +19,9 @@ export const useProducts = async () => {
   const fallbackProducts: Product[] = []
 
   try {
-    const response = await $fetch<{ products: Product[] }>('/api/content/products')
+    const response = await $fetch<{ products: Product[] }>('/api/content/products', {
+      query: { _ts: Date.now() }
+    })
     productsState.value = (response.products ?? []).map((product) => ({
       ...product,
       price: Number(product.price),

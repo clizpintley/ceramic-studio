@@ -98,7 +98,9 @@ export const useSiteContent = async () => {
   const fallbackContent = defaultFallbackContent
 
   try {
-    const response = await $fetch<{ content: SiteContent }>('/api/content/site-content')
+    const response = await $fetch<{ content: SiteContent }>('/api/content/site-content', {
+      query: { _ts: Date.now() }
+    })
     if (response?.content) {
       siteContentState.value = response.content
     }

@@ -1,5 +1,5 @@
 import { join } from 'node:path'
-import { createError, defineEventHandler, getHeader, readBody } from 'h3'
+import { createError, defineEventHandler, getHeader, readBody, setHeader } from 'h3'
 import { readJsonData, writeJsonData } from '../../utils/cms-storage'
 
 const productsFilePath = join(process.cwd(), 'data', 'products.json')
@@ -94,6 +94,9 @@ export default defineEventHandler(async (event) => {
   requireCmsAuth(event)
 
   if (event.method === 'GET') {
+    setHeader(event, 'Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+    setHeader(event, 'Pragma', 'no-cache')
+    setHeader(event, 'Expires', '0')
     return { products: await readProducts() }
   }
 

@@ -27,7 +27,7 @@ const getBlobJson = async (key) => {
 
   const response = await fetch(blob.url)
   if (!response.ok) {
-    return null
+    throw new Error(`Failed to fetch blob content for ${key}.`)
   }
 
   return response.json()
@@ -35,9 +35,19 @@ const getBlobJson = async (key) => {
 
 export const readJsonData = async ({ localPath, blobKey, fallback }) => {
   if (isBlobEnabled()) {
-    const blobData = await getBlobJson(blobKey)
-    if (blobData) {
-      return blobData
+    try {
+      const blobData = await getBlobJson(blobKey)
+      if (blobData) {
+        return blobData
+      }
+    } catch (error) {
+      if (isServerlessRuntime()) {
+        throw error
+      }
+    }
+
+    if (isServerlessRuntime()) {
+      return fallback
     }
   }
 

@@ -9,37 +9,20 @@
         </span>
       </nuxt-link>
       <nav class="w-full md:w-auto flex flex-wrap items-center justify-center gap-x-6 md:gap-x-8 gap-y-2 text-[15px] md:text-base">
-        <nuxt-link 
-          to="/gallery" 
-          class="link-fx px-1 py-1 rounded text-gray-800 hover:text-[#9C4E3A] font-medium transition"
-          :class="isActive('/gallery') ? 'text-[#9C4E3A] underline underline-offset-4 decoration-[#9C4E3A]/50' : ''"
-        >
-          My Products
-        </nuxt-link>
-        <span class="hidden md:inline-block h-1.5 w-1.5 rounded-full bg-[#9C4E3A]/30" aria-hidden="true"></span>
-        <nuxt-link 
-          to="/behind-the-scenes" 
-          class="link-fx px-1 py-1 rounded text-gray-800 hover:text-[#9C4E3A] font-medium transition"
-          :class="isActive('/behind-the-scenes') ? 'text-[#9C4E3A] underline underline-offset-4 decoration-[#9C4E3A]/50' : ''"
-        >
-          Behind the Scenes
-        </nuxt-link>
-        <span class="hidden md:inline-block h-1.5 w-1.5 rounded-full bg-[#9C4E3A]/30" aria-hidden="true"></span>
-        <nuxt-link 
-          to="/about" 
-          class="link-fx px-1 py-1 rounded text-gray-800 hover:text-[#9C4E3A] font-medium transition"
-          :class="isActive('/about') ? 'text-[#9C4E3A] underline underline-offset-4 decoration-[#9C4E3A]/50' : ''"
-        >
-          About Me
-        </nuxt-link>
-        <span class="hidden md:inline-block h-1.5 w-1.5 rounded-full bg-[#9C4E3A]/30" aria-hidden="true"></span>
-        <nuxt-link 
-          to="/contact" 
-          class="link-fx px-1 py-1 rounded text-gray-800 hover:text-[#9C4E3A] font-medium transition"
-          :class="isActive('/contact') ? 'text-[#9C4E3A] underline underline-offset-4 decoration-[#9C4E3A]/50' : ''"
-        >
-          Contact
-        </nuxt-link>
+        <template v-for="(link, index) in navLinks" :key="link.to">
+          <nuxt-link
+            :to="link.to"
+            class="link-fx px-1 py-1 rounded text-gray-800 hover:text-[#9C4E3A] font-medium transition"
+            :class="isActive(link.to) ? 'text-[#9C4E3A] underline underline-offset-4 decoration-[#9C4E3A]/50' : ''"
+          >
+            {{ link.label }}
+          </nuxt-link>
+          <span
+            v-if="index < navLinks.length - 1"
+            class="hidden md:inline-block h-1.5 w-1.5 rounded-full bg-[#9C4E3A]/30"
+            aria-hidden="true"
+          ></span>
+        </template>
         <div class="flex items-center gap-2 md:gap-3">
           <a
             href="https://www.etsy.com/shop/artandabout"
@@ -75,8 +58,10 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
+import { useMainNavigation } from '../composables/useMainNavigation'
 
 const route = useRoute()
+const navLinks = useMainNavigation()
 
 const isActive = (path: string) => {
   return route.path === path || route.path.startsWith(`${path}/`)

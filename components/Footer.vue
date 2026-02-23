@@ -9,10 +9,9 @@
         <div>
           <h3 class="font-bold text-[#9C4E3A] mb-3">Quick Links</h3>
           <ul class="space-y-2 text-sm">
-            <li><nuxt-link to="/gallery" class="link-fx text-gray-700 hover:text-[#9C4E3A]">My Products</nuxt-link></li>
-            <li><nuxt-link to="/behind-the-scenes" class="link-fx text-gray-700 hover:text-[#9C4E3A]">Behind the Scenes</nuxt-link></li>
-            <li><nuxt-link to="/about" class="link-fx text-gray-700 hover:text-[#9C4E3A]">About Me</nuxt-link></li>
-            <li><nuxt-link to="/contact" class="link-fx text-gray-700 hover:text-[#9C4E3A]">Contact</nuxt-link></li>
+            <li v-for="link in navLinks" :key="link.to">
+              <nuxt-link :to="link.to" class="link-fx text-gray-700 hover:text-[#9C4E3A]">{{ link.label }}</nuxt-link>
+            </li>
           </ul>
         </div>
         <div>
@@ -66,5 +65,9 @@
 </template>
 
 <script setup lang="ts">
+import { useState } from 'nuxt/app'
+import { useMainNavigation } from '../composables/useMainNavigation'
+
 const currentYear = useState('footer-year', () => new Date().getFullYear())
+const navLinks = useMainNavigation()
 </script>

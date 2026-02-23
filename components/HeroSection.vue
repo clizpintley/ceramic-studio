@@ -7,7 +7,8 @@
           :alt="activeSlide.title"
           class="absolute inset-0 h-full w-full object-cover"
         />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div>
+        <div class="absolute inset-0 bg-[#F8D6B4]/16"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#9C4E3A]/12 via-transparent to-[#F8D6B4]/10"></div>
       </div>
 
       <div class="mt-3 rounded-xl border border-[#FFE083] bg-[#FFF8EE]/92 px-2.5 py-2.5 md:px-3 md:py-3">

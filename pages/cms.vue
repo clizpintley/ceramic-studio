@@ -52,23 +52,26 @@
       <p v-if="successMessage" class="text-green-700 text-sm mb-3">{{ successMessage }}</p>
       <p v-if="errorMessage" class="text-red-600 text-sm mb-3">{{ errorMessage }}</p>
 
-      <div v-if="activeTab === 'products'">
-        <div class="mb-4 flex flex-wrap items-center justify-end gap-3">
-          <button
-            type="button"
-            class="bg-[#FFCB06] text-gray-800 px-4 py-2 rounded-lg border border-[#E6B800] font-medium"
-            @click="addProduct"
-          >
-            Add Product
-          </button>
-          <button
-            type="button"
-            class="bg-[#D75641] text-white px-4 py-2 rounded-lg hover:bg-[#C54D39] transition font-medium"
-            :disabled="isLoading"
-            @click="saveProducts"
-          >
-            {{ isLoading ? 'Saving...' : 'Save Products' }}
-          </button>
+      <div v-if="activeTab === 'products'" class="rounded-2xl border border-[#FFE083] bg-[#FFF8DC] p-5 md:p-6">
+        <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-2xl font-bold text-[#9C4E3A] font-display">Products</h2>
+          <div class="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              class="bg-[#FFCB06] text-gray-800 px-4 py-2 rounded-lg border border-[#E6B800] font-medium"
+              @click="addProduct"
+            >
+              Add Product
+            </button>
+            <button
+              type="button"
+              class="bg-[#D75641] text-white px-4 py-2 rounded-lg hover:bg-[#C54D39] transition font-medium"
+              :disabled="isLoading"
+              @click="saveProducts"
+            >
+              {{ isLoading ? 'Saving...' : 'Save Products' }}
+            </button>
+          </div>
         </div>
 
         <div class="mb-4 grid grid-cols-1 md:grid-cols-3 gap-3">

@@ -47,17 +47,18 @@
             <span class="hidden sm:inline">Shop on Etsy</span>
             <span class="sm:hidden">Etsy</span>
           </a>
-          <a 
-            href="#" 
-            class="link-fx snipcart-checkout inline-flex items-center gap-1.5 bg-[#F37F61] text-white px-3 md:px-4 py-2 rounded-lg hover:bg-[#E56F54] transition text-sm md:text-base font-medium"
+          <button
+            type="button"
+            disabled
+            class="inline-flex items-center gap-1.5 bg-[#F37F61] text-white px-3 md:px-4 py-2 rounded-lg opacity-60 cursor-not-allowed text-sm md:text-base font-medium"
           >
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
               <circle cx="9" cy="19" r="1.5" />
               <circle cx="17" cy="19" r="1.5" />
               <path d="M3 5h2l1.2 9h11.3l1.3-7H6.5" />
             </svg>
-            Cart
-          </a>
+            Cart (Soon)
+          </button>
         </div>
       </nav>
       </div>

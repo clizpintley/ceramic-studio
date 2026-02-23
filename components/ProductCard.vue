@@ -16,15 +16,11 @@
       <div class="mt-4 pt-4 border-t border-[#FFE083] flex items-center justify-between">
         <div class="text-xl font-bold text-[#9C4E3A]">€{{ product.price.toFixed(2) }}</div>
         <button
-          class="snipcart-add-item bg-[#D75641] text-white px-4 py-2 rounded-lg hover:bg-[#C54D39] transition font-medium text-sm"
-          :data-item-id="product.id"
-          :data-item-price="product.price"
-          :data-item-url="`/product/${product.slug}`"
-          :data-item-name="product.title"
-          :data-item-description="product.short"
-          :data-item-image="product.image"
+          type="button"
+          disabled
+          class="bg-[#D75641] text-white px-4 py-2 rounded-lg opacity-60 cursor-not-allowed font-medium text-sm"
         >
-          Add
+          Coming soon
         </button>
       </div>
     </div>

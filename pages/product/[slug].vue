@@ -12,15 +12,11 @@
         <div class="mt-6 flex items-center justify-between">
           <div class="text-2xl font-extrabold text-[#9C4E3A]">€{{ product.price }}</div>
           <button
-            class="snipcart-add-item bg-[#D75641] text-white px-4 py-2 rounded hover:bg-[#C54D39] transition font-medium"
-            :data-item-id="product.id"
-            :data-item-price="product.price"
-            :data-item-url="`/product/${product.slug}`"
-            :data-item-name="product.title"
-            :data-item-description="product.short"
-            :data-item-image="product.image"
+            type="button"
+            disabled
+            class="bg-[#D75641] text-white px-4 py-2 rounded opacity-60 cursor-not-allowed font-medium"
           >
-            Add to cart
+            Purchase coming soon
           </button>
         </div>
       </div>

@@ -19,12 +19,7 @@ export default defineNuxtConfig({
         { rel: 'apple-touch-icon', href: '/images/logo.png' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Poiret+One&family=Playfair+Display:wght@700;900&family=Lora:wght@400;600&display=swap' },
-        { rel: 'preconnect', href: 'https://cdn.snipcart.com' },
-        { rel: 'stylesheet', href: 'https://cdn.snipcart.com/themes/v3.0.30/default/snipcart.css' }
-      ],
-      script: [
-        { src: 'https://cdn.snipcart.com/themes/v3.0.30/default/snipcart.js', defer: true }
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Poiret+One&family=Playfair+Display:wght@700;900&family=Lora:wght@400;600&display=swap' }
       ]
     }
   },
@@ -35,9 +30,6 @@ export default defineNuxtConfig({
     chatbotMailUser: process.env.CHATBOT_MAIL_USER || 'pupkovateodora@gmail.com',
     chatbotMailPass: process.env.CHATBOT_MAIL_PASS || '',
     chatbotMailFrom: process.env.CHATBOT_MAIL_FROM || 'Art & About <pupkovateodora@gmail.com>',
-    chatbotMailTo: process.env.CHATBOT_MAIL_TO || 'pupkovateodora@gmail.com',
-    public: {
-      snipcartApiKey: process.env.SNIPCART_API_KEY || ''
-    }
+    chatbotMailTo: process.env.CHATBOT_MAIL_TO || 'pupkovateodora@gmail.com'
   }
 })

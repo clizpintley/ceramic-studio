@@ -8,8 +8,6 @@
     </main>
     <Footer />
     <ChatbotEmailWidget />
-
-    <div id="snipcart" :data-api-key="snipcartApiKey" hidden></div>
   </div>
 </template>
 
@@ -17,6 +15,4 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import ChatbotEmailWidget from '~/components/ChatbotEmailWidget.vue'
-const config = useRuntimeConfig()
-const snipcartApiKey = config.public.snipcartApiKey || ''
 </script>

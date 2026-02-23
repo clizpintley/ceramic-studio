@@ -13,7 +13,7 @@
       <h3 class="font-bold text-lg text-yellow-700 group-hover:text-yellow-600 transition">{{ product.title }}</h3>
       <p class="text-sm text-gray-600 mt-2 line-clamp-2">{{ product.short }}</p>
       <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
-        <div class="text-xl font-bold text-yellow-600">${{ product.price.toFixed(2) }}</div>
+        <div class="text-xl font-bold text-yellow-600">€{{ product.price.toFixed(2) }}</div>
         <button
           class="snipcart-add-item bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition font-medium text-sm"
           :data-item-id="product.id"

@@ -10,7 +10,25 @@
           to="/gallery" 
           class="text-gray-800 hover:text-gray-600 font-medium transition"
         >
-          Gallery
+          My Products
+        </nuxt-link>
+        <nuxt-link 
+          to="/behind-the-scenes" 
+          class="text-gray-800 hover:text-gray-600 font-medium transition"
+        >
+          Behind the Scenes
+        </nuxt-link>
+        <nuxt-link 
+          to="/about" 
+          class="text-gray-800 hover:text-gray-600 font-medium transition"
+        >
+          About Me
+        </nuxt-link>
+        <nuxt-link 
+          to="/contact" 
+          class="text-gray-800 hover:text-gray-600 font-medium transition"
+        >
+          Contact
         </nuxt-link>
         <a 
           href="#" 

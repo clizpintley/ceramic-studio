@@ -6,7 +6,7 @@
         <h1 class="text-2xl font-bold text-yellow-700 font-display">{{ product.title }}</h1>
         <p class="text-gray-600 mt-2">{{ product.description }}</p>
         <div class="mt-6 flex items-center justify-between">
-          <div class="text-2xl font-extrabold text-yellow-600">${{ product.price }}</div>
+          <div class="text-2xl font-extrabold text-yellow-600">€{{ product.price }}</div>
           <button
             class="snipcart-add-item bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 transition font-medium"
             :data-item-id="product.id"

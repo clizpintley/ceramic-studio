@@ -5,7 +5,7 @@ export const useProducts = () => {
       slug: 'friends-mug',
       title: 'F.R.I.E.N.D.S Mug',
       short: 'Handpainted mug of the iconic F.R.I.E.N.D.S TV show.',
-      description: 'Handpainted mug of the iconic F.R.I.E.N.D.S TV show. Not dishwasher safe.',
+      description: 'Dimensions: 3.5" diameter x 3.5" height -  material: ceramic, hand-painted with underglaze and finished with a glossy clear glaze. Dishwasher safe.',
       price: 28.00,
       image: '/images/friends_mug.png'
     },

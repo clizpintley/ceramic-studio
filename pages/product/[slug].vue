@@ -1,7 +1,7 @@
 <template>
   <div v-if="product">
     <div class="grid md:grid-cols-2 gap-8">
-      <img :src="product.image" alt="" class="w-full h-96 object-cover rounded" />
+      <img :src="product.image" :alt="product.title" class="w-full h-96 object-cover rounded cursor-zoom-in" @click="openLightbox = true" />
       <div>
         <h1 class="text-2xl font-bold text-yellow-700 font-display">{{ product.title }}</h1>
         <p class="text-gray-600 mt-2">{{ product.description }}</p>
@@ -22,6 +22,9 @@
       </div>
     </div>
   </div>
+  <div v-if="openLightbox" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50" @click="openLightbox = false">
+    <img :src="product.image" :alt="product.title" class="max-w-[90%] max-h-[90%] rounded shadow-lg" />
+  </div>
   <div v-else>
     <p>Product not found.</p>
   </div>
@@ -29,9 +32,24 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
+import { ref } from 'vue'
 
 const { products } = useProducts()
 const route = useRoute()
 const slug = route.params.slug as string
 const product = products.find((p: any) => p.slug === slug)
+
+const openLightbox = ref(false)
+
+if (product) {
+  useHead({
+    title: `${product.title} — Art and About`,
+    meta: [
+      { name: 'description', content: product.short },
+      { property: 'og:title', content: product.title },
+      { property: 'og:description', content: product.short },
+      { property: 'og:image', content: product.image }
+    ]
+  })
+}
 </script>

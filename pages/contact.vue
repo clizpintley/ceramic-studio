@@ -42,3 +42,12 @@
 
 <script setup lang="ts">
 </script>
+
+<script setup>
+useHead({
+  title: 'Contact — Art and About',
+  meta: [
+    { name: 'description', content: 'Contact Tea Pupkova for commissions, questions, or collaborations. Email and Instagram details.' }
+  ]
+})
+</script>

@@ -35,4 +35,13 @@ import ProductCard from '~/components/ProductCard.vue'
 
 const { products } = useProducts()
 const featured = products
+
+useHead({
+  title: 'Hand-painted Ceramics — Art and About',
+  meta: [
+    { name: 'description', content: 'Art and About — hand-painted, handmade ceramics and unique functional art for your home.' },
+    { property: 'og:title', content: 'Hand-painted Ceramics — Art and About' },
+    { property: 'og:description', content: 'Browse handcrafted, hand-painted ceramic pieces by Tea Pupkova.' }
+  ]
+})
 </script>

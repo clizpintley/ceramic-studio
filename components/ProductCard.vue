@@ -4,7 +4,7 @@
       <nuxt-link :to="`/product/${product.slug}`" class="block w-full h-full">
         <img 
           :src="product.image" 
-          alt="" 
+          :alt="product.title" 
           class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
         />
       </nuxt-link>

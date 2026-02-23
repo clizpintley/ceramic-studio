@@ -3,7 +3,7 @@
     <div class="grid md:grid-cols-2 gap-8">
       <img :src="product.image" alt="" class="w-full h-96 object-cover rounded" />
       <div>
-        <h1 class="text-2xl font-bold text-yellow-700">{{ product.title }}</h1>
+        <h1 class="text-2xl font-bold text-yellow-700 font-display">{{ product.title }}</h1>
         <p class="text-gray-600 mt-2">{{ product.description }}</p>
         <div class="mt-6 flex items-center justify-between">
           <div class="text-2xl font-extrabold text-yellow-600">${{ product.price }}</div>

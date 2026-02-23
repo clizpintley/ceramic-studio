@@ -9,7 +9,12 @@ const config: Config = {
     './content/**/*.{md,json}'
   ],
   theme: {
-    extend: {}
+    extend: {
+      fontFamily: {
+        'serif': ['Lora', 'Georgia', 'serif'],
+        'display': ['Playfair Display', 'Georgia', 'serif']
+      }
+    }
   },
   plugins: []
 }

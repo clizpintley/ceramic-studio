@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-white">
+  <div class="min-h-screen flex flex-col bg-white font-serif">
     <Header />
     <main class="flex-grow">
       <div class="container px-4 lg:px-8 py-12">

@@ -15,6 +15,9 @@ export default defineNuxtConfig({
         { name: 'description', content: 'Hand-painted ceramic artist portfolio and shop' }
       ],
       link: [
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lora:wght@400;600&display=swap' },
         { rel: 'preconnect', href: 'https://cdn.snipcart.com' },
         { rel: 'stylesheet', href: 'https://cdn.snipcart.com/themes/v3.0.30/default/snipcart.css' }
       ],

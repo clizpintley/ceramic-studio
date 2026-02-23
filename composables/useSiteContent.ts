@@ -65,16 +65,23 @@ const defaultFallbackContent: SiteContent = {
 export const useSiteContent = async () => {
   const siteContentState = useState<SiteContent | null>('site-content-data', () => null)
   const siteContentLoadedState = useState<boolean>('site-content-loaded', () => false)
+  const siteContentFetchFailedState = useState<boolean>('site-content-fetch-failed', () => false)
   const fallbackContent = defaultFallbackContent
 
-  if (!siteContentLoadedState.value) {
+  const shouldFetch = !siteContentLoadedState.value || siteContentFetchFailedState.value
+
+  if (shouldFetch) {
     try {
       const response = await $fetch<{ content: SiteContent }>('/api/content/site-content')
       if (response?.content) {
         siteContentState.value = response.content
+        siteContentFetchFailedState.value = false
       }
     } catch {
-      siteContentState.value = fallbackContent
+      siteContentFetchFailedState.value = true
+      if (!siteContentState.value) {
+        siteContentState.value = fallbackContent
+      }
     } finally {
       siteContentLoadedState.value = true
     }

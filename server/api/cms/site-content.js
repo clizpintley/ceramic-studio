@@ -122,7 +122,14 @@ export default defineEventHandler(async (event) => {
   if (event.method === 'POST') {
     const body = await readBody(event)
     const normalizedContent = normalize(body?.content)
-    await writeSiteContent(normalizedContent)
+    try {
+      await writeSiteContent(normalizedContent)
+    } catch (error) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: error?.message || 'Failed to save site content.'
+      })
+    }
 
     return {
       ok: true

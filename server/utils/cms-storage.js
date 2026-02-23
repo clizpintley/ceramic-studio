@@ -46,6 +46,7 @@ export const writeJsonData = async ({ localPath, blobKey, data }) => {
     await put(blobKey, payload, {
       access: 'public',
       addRandomSuffix: false,
+      allowOverwrite: true,
       contentType: 'application/json',
       token: blobToken
     })

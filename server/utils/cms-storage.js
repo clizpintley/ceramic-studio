@@ -9,11 +9,10 @@ export const allowedImageExtensions = new Set(['.png', '.jpg', '.jpeg', '.webp',
 
 const getBlobJson = async (key) => {
   const result = await list({ prefix: key, limit: 100, token: blobToken })
-  const exactBlob = result.blobs.find((entry) => entry.pathname === key)
   const latestBlob = result.blobs
     .slice()
     .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime())[0]
-  const blob = exactBlob || latestBlob
+  const blob = latestBlob
 
   if (!blob) {
     return null

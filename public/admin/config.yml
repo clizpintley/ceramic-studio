@@ -1,3 +1,5 @@
+# Legacy Netlify CMS config kept for reference only.
+# Active CMS is the custom in-app editor at /cms.
 backend:
   name: git-gateway
   branch: main
@@ -6,18 +8,30 @@ media_folder: "public/uploads"
 public_folder: "/uploads"
 
 collections:
-  - name: "products"
-    label: "Products"
-    folder: "data/products"
-    create: true
-    identifier_field: "slug"
-    slug: "{{slug}}"
-    format: "json"
-    fields:
-      - { label: "ID", name: "id", widget: "string" }
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Slug", name: "slug", widget: "string" }
-      - { label: "Short description", name: "short", widget: "string" }
-      - { label: "Description", name: "description", widget: "text" }
-      - { label: "Price", name: "price", widget: "number" }
-      - { label: "Image", name: "image", widget: "image" }
+  - name: "catalog"
+    label: "Catalog"
+    files:
+      - name: "products"
+        label: "Products"
+        file: "data/products.json"
+        fields:
+          - label: "Products"
+            name: "products"
+            widget: "list"
+            summary: "{{fields.title}} ({{fields.category}})"
+            fields:
+              - { label: "ID", name: "id", widget: "string", hint: "Unique id, e.g. ceramic-friends-mug" }
+              - { label: "Slug", name: "slug", widget: "string", hint: "Used in URL, e.g. friends-mug" }
+              - label: "Category"
+                name: "category"
+                widget: "select"
+                options:
+                  - { label: "Drinkware", value: "drinkware" }
+                  - { label: "Tableware", value: "tableware" }
+                  - { label: "Decor", value: "decor" }
+                  - { label: "Tote Bags", value: "tote-bags" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Short Description", name: "short", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+              - { label: "Price", name: "price", widget: "number", value_type: "float", min: 0 }
+              - { label: "Image", name: "image", widget: "image" }

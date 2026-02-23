@@ -44,7 +44,8 @@ const { products } = useProducts()
 const productGroups = [
   { label: 'Drinkware', value: 'drinkware' },
   { label: 'Tableware', value: 'tableware' },
-  { label: 'Decor', value: 'decor' }
+  { label: 'Decor', value: 'decor' },
+  { label: 'Tote Bags', value: 'tote-bags' }
 ]
 
 const activeGroup = ref('drinkware')

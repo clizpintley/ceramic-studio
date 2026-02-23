@@ -29,6 +29,7 @@ export default defineNuxtConfig({
     }
   },
   runtimeConfig: {
+    cmsPassword: process.env.CMS_PASSWORD || 'vasko',
     chatbotMailHost: process.env.CHATBOT_MAIL_HOST || '',
     chatbotMailPort: process.env.CHATBOT_MAIL_PORT || '587',
     chatbotMailUser: process.env.CHATBOT_MAIL_USER || 'pupkovateodora@gmail.com',

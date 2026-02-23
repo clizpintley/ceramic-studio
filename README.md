@@ -20,7 +20,7 @@ npm run dev
 
 Notes
 
-- Products live in `data/products` (image files are under `/public/images` — add your images there).
+- Products live in `data/products.json` (image files are under `/public/images` — add your images there).
 - For a production store consider Stripe/Shopify or adding server-side inventory management.
 
 Snipcart setup
@@ -67,12 +67,22 @@ npm run dev
 ```
 
 
-Netlify CMS (file-based admin)
+Custom CMS (built into this app)
 
-This project includes a simple Netlify CMS setup to manage product files stored in `data/products`.
+This project includes a simple custom CMS page to manage products directly.
 
-- Admin UI: `/admin/` (served from `public/admin/index.html`)
-- Configure Netlify Identity and enable Git Gateway in Netlify to allow CMS to commit changes.
-- Product files are stored as JSON in `data/products/*.json` and are loaded at build-time.
+- Admin UI: `/cms`
+- API endpoint: `/api/cms/products`
+- Data file: `data/products.json`
 
-To enable locally, follow Netlify CMS docs and deploy to Netlify with Identity + Git Gateway enabled.
+Set a password in `.env`:
+
+```bash
+CMS_PASSWORD=YOUR_STRONG_PASSWORD
+```
+
+Restart the app and open `/cms`.
+
+Legacy note
+
+- `public/admin/index.html` and `public/admin/config.yml` are kept only as legacy references and are not used by the active CMS flow.

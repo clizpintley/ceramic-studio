@@ -1,4 +1,5 @@
 import { $fetch } from 'ofetch'
+import { useState } from 'nuxt/app'
 
 export type SiteContent = {
   about: {
@@ -32,9 +33,6 @@ export type SiteContent = {
   }
 }
 
-let cachedSiteContent: SiteContent | null = null
-let siteContentLoaded = false
-
 const defaultFallbackContent: SiteContent = {
   about: {
     heading: "I'm Tea Pupkova",
@@ -65,20 +63,22 @@ const defaultFallbackContent: SiteContent = {
 }
 
 export const useSiteContent = async () => {
+  const siteContentState = useState<SiteContent | null>('site-content-data', () => null)
+  const siteContentLoadedState = useState<boolean>('site-content-loaded', () => false)
   const fallbackContent = defaultFallbackContent
 
-  if (!siteContentLoaded) {
+  if (!siteContentLoadedState.value) {
     try {
       const response = await $fetch<{ content: SiteContent }>('/api/content/site-content')
       if (response?.content) {
-        cachedSiteContent = response.content
+        siteContentState.value = response.content
       }
     } catch {
-      cachedSiteContent = fallbackContent
+      siteContentState.value = fallbackContent
     } finally {
-      siteContentLoaded = true
+      siteContentLoadedState.value = true
     }
   }
 
-  return cachedSiteContent ?? fallbackContent
+  return siteContentState.value ?? fallbackContent
 }

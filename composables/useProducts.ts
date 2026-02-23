@@ -1,4 +1,5 @@
 import { $fetch } from 'ofetch'
+import { useState } from 'nuxt/app'
 
 export type Product = {
   id: string
@@ -11,25 +12,24 @@ export type Product = {
   image: string
 }
 
-let cachedProducts: Product[] | null = null
-let productsLoaded = false
-
 export const useProducts = async () => {
+  const productsState = useState<Product[]>('products-data', () => [])
+  const productsLoadedState = useState<boolean>('products-loaded', () => false)
   const fallbackProducts: Product[] = []
 
-  if (!productsLoaded) {
+  if (!productsLoadedState.value) {
     try {
       const response = await $fetch<{ products: Product[] }>('/api/content/products')
-      cachedProducts = (response.products ?? []).map((product) => ({
+      productsState.value = (response.products ?? []).map((product) => ({
         ...product,
         price: Number(product.price)
       }))
     } catch {
-      cachedProducts = fallbackProducts
+      productsState.value = fallbackProducts
     } finally {
-      productsLoaded = true
+      productsLoadedState.value = true
     }
   }
 
-  return { products: cachedProducts ?? fallbackProducts }
+  return { products: productsState.value ?? fallbackProducts }
 }

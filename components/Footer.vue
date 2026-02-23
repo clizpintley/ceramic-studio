@@ -9,8 +9,10 @@
         <div>
           <h3 class="font-bold text-yellow-700 mb-3">Quick Links</h3>
           <ul class="space-y-2 text-sm">
-            <li><nuxt-link to="/" class="text-gray-700 hover:text-yellow-600">Home</nuxt-link></li>
-            <li><nuxt-link to="/gallery" class="text-gray-700 hover:text-yellow-600">Gallery</nuxt-link></li>
+            <li><nuxt-link to="/gallery" class="text-gray-700 hover:text-yellow-600">My Products</nuxt-link></li>
+            <li><nuxt-link to="/behind-the-scenes" class="text-gray-700 hover:text-yellow-600">Behind the Scenes</nuxt-link></li>
+            <li><nuxt-link to="/about" class="text-gray-700 hover:text-yellow-600">About Me</nuxt-link></li>
+            <li><nuxt-link to="/contact" class="text-gray-700 hover:text-yellow-600">Contact</nuxt-link></li>
           </ul>
         </div>
         <div>

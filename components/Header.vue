@@ -8,11 +8,11 @@
           <span class="hidden xl:inline"></span>
         </span>
       </nuxt-link>
-      <nav class="w-full md:w-auto flex flex-wrap items-center justify-center gap-x-6 md:gap-x-8 gap-y-2 text-[15px] md:text-base">
+      <nav class="w-full md:w-auto flex flex-wrap md:flex-nowrap items-center justify-center gap-x-4 md:gap-x-5 gap-y-2 md:gap-y-0 text-base md:text-[16px]">
         <template v-for="(link, index) in navLinks" :key="link.to">
           <nuxt-link
             :to="link.to"
-            class="link-fx px-1 py-1 rounded text-gray-800 hover:text-[#9C4E3A] font-medium transition"
+            class="link-fx px-1.5 py-1.5 rounded text-gray-800 hover:text-[#9C4E3A] font-medium transition whitespace-nowrap"
             :class="isActive(link.to) ? 'text-[#9C4E3A] underline underline-offset-4 decoration-[#9C4E3A]/50' : ''"
           >
             {{ link.label }}
@@ -23,12 +23,12 @@
             aria-hidden="true"
           ></span>
         </template>
-        <div class="flex items-center gap-2 md:gap-3">
+        <div class="flex items-center gap-2 md:gap-2.5 shrink-0 whitespace-nowrap">
           <a
             :href="etsyUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="link-fx btn-primary !bg-[#F37F61] !border-[#F37F61] hover:!bg-[#E56F54] hover:!border-[#E56F54] gap-1.5 px-3 md:px-4 text-sm md:text-base"
+            class="link-fx btn-primary !bg-[#F37F61] !border-[#F37F61] hover:!bg-[#E56F54] hover:!border-[#E56F54] gap-1.5 px-3 md:px-3.5 text-sm md:text-sm"
           >
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
               <path d="M6 8.5h12l-1.2 9H7.2L6 8.5z" />
@@ -40,7 +40,7 @@
           <button
             type="button"
             disabled
-            class="btn-primary !bg-[#F37F61] !border-[#F37F61] inline-flex items-center gap-1.5 px-3 md:px-4 opacity-60 cursor-not-allowed text-sm md:text-base"
+            class="btn-primary !bg-[#F37F61] !border-[#F37F61] inline-flex items-center gap-1.5 px-3 md:px-3.5 opacity-60 cursor-not-allowed text-sm md:text-sm"
           >
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
               <circle cx="9" cy="19" r="1.5" />

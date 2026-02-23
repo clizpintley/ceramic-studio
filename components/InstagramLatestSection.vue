@@ -6,9 +6,14 @@
         :href="content.instagram.profileUrl"
         target="_blank"
         rel="noopener noreferrer"
-        class="btn-secondary"
+        class="btn-secondary inline-flex items-center gap-2"
       >
-        Visit Instagram
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <rect x="4" y="4" width="16" height="16" rx="4" />
+          <circle cx="12" cy="12" r="3.5" />
+          <circle cx="17" cy="7" r="1" fill="currentColor" stroke="none" />
+        </svg>
+        <span>Visit Instagram</span>
       </a>
     </div>
 

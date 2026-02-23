@@ -82,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useProducts } from '../composables/useProducts'
 
 const { products } = await useProducts()
@@ -95,12 +95,11 @@ const introSlide = {
   isIntro: true
 }
 
+const maxHeroProducts = 3
 const featuredProducts = products.filter((product: any) => Boolean(product.featured))
-const heroProducts = featuredProducts.length ? featuredProducts : products
+const heroProducts = (featuredProducts.length ? featuredProducts : products).slice(0, maxHeroProducts)
 const slides = [introSlide, ...heroProducts.map((product: any) => ({ ...product, isIntro: false }))]
 const activeIndex = ref(0)
-const slideIntervalMs = 4500
-let timer: ReturnType<typeof setInterval> | null = null
 
 const activeSlide = computed(() => slides[activeIndex.value])
 
@@ -113,18 +112,4 @@ const prevSlide = () => {
   if (!slides.length) return
   activeIndex.value = (activeIndex.value - 1 + slides.length) % slides.length
 }
-
-onMounted(() => {
-  if (!slides.length) return
-  timer = setInterval(() => {
-    nextSlide()
-  }, slideIntervalMs)
-})
-
-onBeforeUnmount(() => {
-  if (timer) {
-    clearInterval(timer)
-    timer = null
-  }
-})
 </script>

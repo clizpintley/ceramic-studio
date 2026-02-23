@@ -11,12 +11,19 @@
       <div
         v-for="(card, index) in content.behindTheScenes.cards"
         :key="`${card.title}-${index}`"
-        class="bg-[#F8D6B4] p-6 rounded-lg border border-[#F8D6B4] reveal-step transition-all duration-500 hover:-translate-y-1 hover:shadow-lg hover:border-[#FFCB06]"
+        class="group relative overflow-hidden bg-[#F8D6B4] p-6 rounded-lg border border-[#F8D6B4] reveal-step transition-all duration-500 hover:-translate-y-1 hover:shadow-lg hover:border-[#FFCB06]"
         :class="visible ? 'is-visible' : ''"
         :style="{ '--delay': `${500 + index * 320}ms` }"
       >
-        <h3 class="text-2xl font-bold text-[#9C4E3A] mb-3 font-display">{{ card.title }}</h3>
-        <p class="text-gray-700 leading-relaxed">
+        <div
+          class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          :style="{
+            backgroundImage: 'repeating-linear-gradient(135deg, rgba(156,78,58,0.1) 0px, rgba(156,78,58,0.1) 8px, rgba(255,241,179,0.06) 8px, rgba(255,241,179,0.06) 16px)'
+          }"
+          aria-hidden="true"
+        />
+        <h3 class="relative z-10 text-2xl font-bold text-[#9C4E3A] mb-3 font-display">{{ card.title }}</h3>
+        <p class="relative z-10 text-gray-700 leading-relaxed">
           {{ card.text }}
         </p>
       </div>

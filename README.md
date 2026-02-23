@@ -45,6 +45,27 @@ Notes about product URLs
 
 - Each product's `data-item-url` should resolve to the product page (the app uses relative paths). If you deploy under a subdirectory, update `data-item-url` values to be absolute.
 
+Chatbot email setup
+
+The site now includes a floating chatbot widget that can send the chat transcript to your email.
+
+Add these environment variables in `.env` (local) and in your hosting provider (production):
+
+```bash
+CHATBOT_MAIL_HOST=smtp.yourprovider.com
+CHATBOT_MAIL_PORT=587
+CHATBOT_MAIL_USER=your-smtp-user
+CHATBOT_MAIL_PASS=your-smtp-password
+CHATBOT_MAIL_FROM="Art & About <no-reply@yourdomain.com>"
+CHATBOT_MAIL_TO=pupkovateodora@gmail.com
+```
+
+Then restart the dev server:
+
+```bash
+npm run dev
+```
+
 
 Netlify CMS (file-based admin)
 

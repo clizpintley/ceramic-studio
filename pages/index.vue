@@ -1,47 +1,94 @@
 <template>
   <section>
-    <!-- Hero Section -->
-    <div class="mb-16 py-16 bg-gradient-to-r from-yellow-50 via-yellow-100 to-yellow-50 rounded-3xl px-8">
-      <div class="text-center">
-        <h1 class="text-5xl md:text-6xl font-extrabold text-yellow-700 mb-4 font-display">Hand-painted Ceramics</h1>
-        <p class="text-xl text-gray-700 mb-8">Unique, functional art for your home.</p>
-        <p class="text-gray-600 max-w-2xl mx-auto mb-8">Each piece is lovingly handcrafted and hand-painted with care. Discover our collection of beautiful, one-of-a-kind ceramic pieces.</p>
-        <nuxt-link 
-          to="/gallery"
-          class="inline-block bg-yellow-600 text-white px-8 py-3 rounded-lg hover:bg-yellow-700 transition font-semibold"
-        >
-          Explore Gallery
-        </nuxt-link>
-      </div>
+    <HeroSection class="reveal-item" />
+    <div class="reveal-item reveal-divider my-10 flex items-center" aria-hidden="true">
+      <div class="h-px flex-1 bg-[#F8D6B4]"></div>
+      <div class="mx-4 h-2 w-2 rounded-full bg-[#D75641]"></div>
+      <div class="h-px flex-1 bg-[#F8D6B4]"></div>
     </div>
-
-    <!-- Featured Section -->
-    <div class="mb-12">
-      <div class="flex items-center justify-between mb-8">
-        <div>
-          <h2 class="text-3xl font-bold text-yellow-600 font-display">Featured Pieces</h2>
-          <p class="text-gray-600 mt-2">Handpicked selections from our collection</p>
-        </div>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <ProductCard v-for="p in featured" :key="p.id" :product="p" />
-      </div>
+    <ProductsSection class="reveal-item" />
+    <div class="reveal-item reveal-divider my-10 flex items-center" aria-hidden="true">
+      <div class="h-px flex-1 bg-[#F8D6B4]"></div>
+      <div class="mx-4 h-2 w-2 rounded-full bg-[#D75641]"></div>
+      <div class="h-px flex-1 bg-[#F8D6B4]"></div>
     </div>
+    <AboutSection class="reveal-item" />
+    <div class="reveal-item reveal-divider my-10 flex items-center" aria-hidden="true">
+      <div class="h-px flex-1 bg-[#F8D6B4]"></div>
+      <div class="mx-4 h-2 w-2 rounded-full bg-[#D75641]"></div>
+      <div class="h-px flex-1 bg-[#F8D6B4]"></div>
+    </div>
+    <BehindTheScenesSection class="reveal-item" />
+    <div class="reveal-item reveal-divider my-10 flex items-center" aria-hidden="true">
+      <div class="h-px flex-1 bg-[#F8D6B4]"></div>
+      <div class="mx-4 h-2 w-2 rounded-full bg-[#D75641]"></div>
+      <div class="h-px flex-1 bg-[#F8D6B4]"></div>
+    </div>
+    <ContactSection class="reveal-item" />
   </section>
 </template>
 
 <script setup lang="ts">
-import ProductCard from '~/components/ProductCard.vue'
-
-const { products } = useProducts()
-const featured = products
+import { onBeforeUnmount, onMounted } from 'vue'
 
 useHead({
-  title: 'Hand-painted Ceramics — Art and About',
+  title: 'Art & About - Tea Pupkova',
   meta: [
-    { name: 'description', content: 'Art and About — hand-painted, handmade ceramics and unique functional art for your home.' },
+    { name: 'description', content: 'Tea Pupkova creates hand-painted, functional ceramics—mugs, teapots, bowls, and custom pieces inspired by stories, characters, and everyday home rituals.' },
     { property: 'og:title', content: 'Hand-painted Ceramics — Art and About' },
-    { property: 'og:description', content: 'Browse handcrafted, hand-painted ceramic pieces by Tea Pupkova.' }
+    { property: 'og:description', content: 'Hand-painted functional ceramics by Tea Pupkova: mugs, teapots, bowls, and custom illustrated pieces made for everyday use.' }
   ]
 })
+
+let revealObserver: IntersectionObserver | null = null
+
+onMounted(() => {
+  const revealItems = document.querySelectorAll('.reveal-item')
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  if (reduceMotion) {
+    revealItems.forEach((item) => item.classList.add('is-visible'))
+    return
+  }
+
+  revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible')
+          revealObserver?.unobserve(entry.target)
+        }
+      })
+    },
+    {
+      threshold: 0.15,
+      rootMargin: '0px 0px -10% 0px'
+    }
+  )
+
+  revealItems.forEach((item) => revealObserver?.observe(item))
+})
+
+onBeforeUnmount(() => {
+  revealObserver?.disconnect()
+  revealObserver = null
+})
 </script>
+
+<style scoped>
+.reveal-item {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 600ms ease, transform 600ms ease;
+  will-change: opacity, transform;
+}
+
+.reveal-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-divider {
+  transition-duration: 700ms;
+}
+</style>

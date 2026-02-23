@@ -8,6 +8,7 @@
     "preview": "nuxi preview"
   },
   "dependencies": {
+    "nodemailer": "^8.0.1",
     "nuxt": "^3.8.0",
     "photoswipe": "^5.3.8"
   },

@@ -8,3 +8,44 @@ html, body, #__nuxt {
 
 /* small utilities for demo */
 .container { max-width: 1100px; margin: 0 auto; }
+
+.link-fx {
+  transition: transform 150ms ease, opacity 150ms ease, color 150ms ease, background-color 150ms ease;
+  transform-origin: center;
+}
+
+.link-fx:hover {
+  transform: translateY(-1px);
+}
+
+.link-fx:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+.link-fx:focus-visible {
+  outline: 2px solid #D75641;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link-fx {
+    transition: none;
+  }
+
+  .link-fx:hover,
+  .link-fx:active {
+    transform: none;
+  }
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 520ms ease, transform 520ms ease;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}

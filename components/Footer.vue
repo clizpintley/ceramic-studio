@@ -59,11 +59,12 @@
         </div>
       </div>
       <div class="border-t border-[#FFE083] pt-6 text-center text-sm text-gray-600">
-        © {{ new Date().getFullYear() }} Art & About — Tea Pupkova
+        © {{ currentYear }} Art & About — Tea Pupkova
       </div>
     </div>
   </footer>
 </template>
 
 <script setup lang="ts">
+const currentYear = useState('footer-year', () => new Date().getFullYear())
 </script>

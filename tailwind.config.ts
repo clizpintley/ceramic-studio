@@ -12,7 +12,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         'serif': ['Lora', 'Georgia', 'serif'],
-        'display': ['Playfair Display', 'Georgia', 'serif']
+        'display': ['Poiret One', 'Playfair Display', 'Georgia', 'serif']
       }
     }
   },

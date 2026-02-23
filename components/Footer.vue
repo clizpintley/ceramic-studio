@@ -15,7 +15,7 @@
         </div>
         <div>
           <h3 class="font-bold text-yellow-700 mb-3">Contact</h3>
-          <p class="text-sm text-gray-700">Email: pupkovateodora@gmail.com</p>
+          <p class="text-sm text-gray-700">Email: <a href="mailto:pupkovateodora@gmail.com" class="text-yellow-600 hover:text-yellow-700 font-medium transition">pupkovateodora@gmail.com</a></p>
           <p class="text-sm text-gray-700 mt-2">
             <a 
               href="https://www.instagram.com/artandaboutpupkova" 

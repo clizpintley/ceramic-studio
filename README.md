@@ -27,6 +27,14 @@ Cart status
 - The product purchase buttons are shown as "Coming soon" placeholders.
 - No Snipcart API key is required for deployment in the current state.
 
+Re-enable cart later
+
+1. Add `SNIPCART_API_KEY` to your local `.env` and your hosting provider env vars.
+2. In `nuxt.config.js`, add Snipcart CSS/JS back under `app.head`.
+3. In `app.vue`, restore the `#snipcart` container with the runtime API key binding.
+4. In `components/Header.vue`, `components/ProductCard.vue`, and `pages/product/[slug].vue`, restore the Snipcart checkout/add-item classes and data attributes.
+5. Redeploy and verify cart/checkout behavior.
+
 Chatbot email setup
 
 The site now includes a floating chatbot widget that can send the chat transcript to your email.

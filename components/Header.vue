@@ -8,25 +8,28 @@
           <span class="hidden xl:inline"></span>
         </span>
       </nuxt-link>
-      <nav class="w-full md:w-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[15px] md:text-base">
+      <nav class="w-full md:w-auto flex flex-wrap items-center justify-center gap-x-6 md:gap-x-8 gap-y-2 text-[15px] md:text-base">
         <nuxt-link 
           to="/gallery" 
           class="link-fx text-gray-800 hover:text-[#9C4E3A] font-medium transition"
         >
           My Products
         </nuxt-link>
+        <span class="hidden md:inline-block h-1.5 w-1.5 rounded-full bg-[#9C4E3A]/30" aria-hidden="true"></span>
         <nuxt-link 
           to="/behind-the-scenes" 
           class="link-fx text-gray-800 hover:text-[#9C4E3A] font-medium transition"
         >
           Behind the Scenes
         </nuxt-link>
+        <span class="hidden md:inline-block h-1.5 w-1.5 rounded-full bg-[#9C4E3A]/30" aria-hidden="true"></span>
         <nuxt-link 
           to="/about" 
           class="link-fx text-gray-800 hover:text-[#9C4E3A] font-medium transition"
         >
           About Me
         </nuxt-link>
+        <span class="hidden md:inline-block h-1.5 w-1.5 rounded-full bg-[#9C4E3A]/30" aria-hidden="true"></span>
         <nuxt-link 
           to="/contact" 
           class="link-fx text-gray-800 hover:text-[#9C4E3A] font-medium transition"

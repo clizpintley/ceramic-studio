@@ -8,8 +8,12 @@ const isBlobEnabled = () => Boolean(blobToken)
 export const allowedImageExtensions = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg'])
 
 const getBlobJson = async (key) => {
-  const result = await list({ prefix: key, limit: 1, token: blobToken })
-  const blob = result.blobs.find((entry) => entry.pathname === key) || result.blobs[0]
+  const result = await list({ prefix: key, limit: 100, token: blobToken })
+  const exactBlob = result.blobs.find((entry) => entry.pathname === key)
+  const latestBlob = result.blobs
+    .slice()
+    .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime())[0]
+  const blob = exactBlob || latestBlob
 
   if (!blob) {
     return null
@@ -45,8 +49,7 @@ export const writeJsonData = async ({ localPath, blobKey, data }) => {
   if (isBlobEnabled()) {
     await put(blobKey, payload, {
       access: 'public',
-      addRandomSuffix: false,
-      allowOverwrite: true,
+      addRandomSuffix: true,
       contentType: 'application/json',
       token: blobToken
     })

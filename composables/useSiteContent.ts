@@ -92,7 +92,7 @@ const defaultFallbackContent: SiteContent = {
     showEtsy: true,
     etsyLabel: 'Etsy shop:',
     etsyName: 'Art & About',
-    etsyUrl: 'https://www.etsy.com/shop/artandabout',
+    etsyUrl: 'https://www.etsy.com/shop/artandaboutpupkova',
     showFacebook: false,
     facebookLabel: 'Facebook:',
     facebookHandle: 'Art & About',
@@ -122,11 +122,15 @@ export const useSiteContent = async () => {
       query: { _ts: Date.now() }
     })
     if (response?.content) {
-      siteContentState.value = response.content
+      if (siteContentState.value) {
+        Object.assign(siteContentState.value, response.content)
+      } else {
+        siteContentState.value = response.content
+      }
     }
   } catch {
     if (!siteContentState.value) {
-      siteContentState.value = fallbackContent
+      siteContentState.value = { ...fallbackContent }
     }
   }
 

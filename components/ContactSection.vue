@@ -71,6 +71,12 @@ const content = await useSiteContent()
 <style scoped>
 .contact-bubble {
   box-shadow: 0 12px 24px rgba(156, 78, 58, 0.1);
+  transition: transform 240ms ease, box-shadow 240ms ease;
+}
+
+.contact-bubble:hover {
+  transform: scale(1.03);
+  box-shadow: 0 18px 30px rgba(156, 78, 58, 0.16);
 }
 
 .contact-bubble-tail {

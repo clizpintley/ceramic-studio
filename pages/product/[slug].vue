@@ -40,6 +40,39 @@ const { products } = await useProducts()
 const route = useRoute()
 const slug = route.params.slug as string
 const product = products.find((p: any) => p.slug === slug)
+const config = useRuntimeConfig()
+const siteUrl = String(config.public.siteUrl || 'https://artandabout.vercel.app').replace(/\/+$/, '')
+
+useHead({
+  title: product ? `${product.title} | Art & About` : 'Product | Art & About',
+  meta: [
+    {
+      name: 'description',
+      content: product
+        ? `${product.title} — ${product.short || product.description || 'Hand-painted ceramic piece by Tea Pupkova.'}`
+        : 'Hand-painted ceramic piece by Tea Pupkova from Art & About.'
+    },
+    {
+      property: 'og:title',
+      content: product ? `${product.title} | Art & About` : 'Art & About Product'
+    },
+    {
+      property: 'og:description',
+      content: product
+        ? `${product.short || product.description || 'Hand-painted ceramic piece by Tea Pupkova.'}`
+        : 'Hand-painted ceramic piece by Tea Pupkova.'
+    },
+    {
+      property: 'og:image',
+      content: product ? `${siteUrl}${product.image}` : `${siteUrl}/images/logo.png`
+    },
+    {
+      property: 'og:url',
+      content: `${siteUrl}/product/${slug}`
+    }
+  ],
+  link: [{ rel: 'canonical', href: `${siteUrl}/product/${slug}` }]
+})
 
 const availabilityLabel = (availability: string) => {
   return String(availability || 'in-stock')

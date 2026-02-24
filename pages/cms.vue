@@ -709,6 +709,11 @@
 import { computed, ref } from 'vue'
 import { $fetch } from 'ofetch'
 
+useHead({
+  title: 'CMS — Art & About',
+  meta: [{ name: 'robots', content: 'noindex, nofollow, noarchive' }]
+})
+
 type Product = {
   id: string
   slug: string
@@ -813,7 +818,7 @@ const defaultSiteContent = (): SiteContent => ({
     showEtsy: true,
     etsyLabel: 'Etsy shop:',
     etsyName: 'Art & About',
-    etsyUrl: 'https://www.etsy.com/shop/artandabout',
+    etsyUrl: 'https://www.etsy.com/shop/artandaboutpupkova',
     showFacebook: false,
     facebookLabel: 'Facebook:',
     facebookHandle: 'Art & About',

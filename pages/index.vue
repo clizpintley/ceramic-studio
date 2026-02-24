@@ -43,13 +43,20 @@
 <script setup lang="ts">
 import { nextTick, onBeforeUnmount, onMounted } from 'vue'
 
+const config = useRuntimeConfig()
+const siteUrl = String(config.public.siteUrl || 'https://artandabout.vercel.app').replace(/\/+$/, '')
+
 useHead({
-  title: 'Art & About - Tea Pupkova',
+  title: 'Art & About | Tea Pupkova Ceramics',
   meta: [
-    { name: 'description', content: 'Tea Pupkova creates hand-painted, functional ceramics—mugs, teapots, bowls, and custom pieces inspired by stories, characters, and everyday home rituals.' },
-    { property: 'og:title', content: 'Hand-painted Ceramics — Art and About' },
-    { property: 'og:description', content: 'Hand-painted functional ceramics by Tea Pupkova: mugs, teapots, bowls, and custom illustrated pieces made for everyday use.' }
-  ]
+    { name: 'description', content: 'Art & About by Tea (Theodora) Pupkova — hand-painted, handmade ceramics including mugs, teapots, bowls, and unique functional ceramic art.' },
+    { name: 'keywords', content: 'Art and About, Tea Pupkova, Theodora Pupkova, Pupkova, handmade ceramics, hand painted ceramics, ceramic art, pottery artist' },
+    { property: 'og:title', content: 'Art & About | Hand-painted Ceramics by Tea Pupkova' },
+    { property: 'og:description', content: 'Hand-painted functional ceramics by Tea Pupkova: mugs, teapots, bowls, and custom illustrated pieces made for everyday use.' },
+    { property: 'og:url', content: `${siteUrl}/` },
+    { name: 'twitter:card', content: 'summary_large_image' }
+  ],
+  link: [{ rel: 'canonical', href: `${siteUrl}/` }]
 })
 
 let revealObserver: IntersectionObserver | null = null

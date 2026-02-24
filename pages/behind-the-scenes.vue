@@ -3,10 +3,14 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig()
+const siteUrl = String(config.public.siteUrl || 'https://artandabout.vercel.app').replace(/\/+$/, '')
+
 useHead({
-  title: 'Behind the Scenes — Art and About',
+  title: 'Ceramics Process — Behind the Scenes | Art & About',
   meta: [
-    { name: 'description', content: 'Behind the scenes at Art and About — see the process, materials, and studio life of ceramic artist Tea Pupkova.' }
-  ]
+    { name: 'description', content: 'Go behind the scenes with Tea Pupkova and see how Art & About hand-painted ceramics are designed, painted, glazed, and finished.' }
+  ],
+  link: [{ rel: 'canonical', href: `${siteUrl}/behind-the-scenes` }]
 })
 </script>

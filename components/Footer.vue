@@ -24,14 +24,14 @@
             <span>{{ content.contact.emailLabel }}</span>
             <a :href="`mailto:${content.contact.emailAddress}`" class="link-fx text-[#C4674A] hover:text-[#9C4E3A] font-medium transition">{{ content.contact.emailAddress }}</a>
           </p>
-          <p v-if="content.contact.showEtsy" class="text-sm text-gray-700 mt-2 flex items-center gap-2">
+          <p v-if="showEtsyFooter" class="text-sm text-gray-700 mt-2 flex items-center gap-2">
             <svg class="w-4 h-4 text-[#C4674A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
               <path d="M6 8.5h12l-1.2 9H7.2L6 8.5z" />
               <path d="M9 8.5V8a3 3 0 0 1 6 0v.5" />
             </svg>
             <span>{{ content.contact.etsyLabel }}</span>
             <a
-              :href="content.contact.etsyUrl"
+              :href="etsyUrl"
               target="_blank"
               rel="noopener noreferrer"
               class="link-fx text-[#C4674A] hover:text-[#9C4E3A] font-medium transition"
@@ -81,6 +81,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useState } from 'nuxt/app'
 import { useMainNavigation } from '../composables/useMainNavigation'
 import { useSiteContent } from '../composables/useSiteContent'
@@ -88,4 +89,7 @@ import { useSiteContent } from '../composables/useSiteContent'
 const currentYear = useState('footer-year', () => new Date().getFullYear())
 const navLinks = useMainNavigation()
 const content = await useSiteContent()
+
+const etsyUrl = computed(() => String(content.contact.etsyUrl || '').trim())
+const showEtsyFooter = computed(() => Boolean(content.contact.showEtsy && etsyUrl.value))
 </script>

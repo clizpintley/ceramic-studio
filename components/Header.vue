@@ -25,6 +25,7 @@
         </template>
         <div class="flex items-center gap-2 md:gap-2.5 shrink-0 whitespace-nowrap">
           <a
+            v-if="showEtsyButton"
             :href="etsyUrl"
             target="_blank"
             rel="noopener noreferrer"
@@ -67,7 +68,11 @@ const navLinks = useMainNavigation()
 const content = await useSiteContent()
 
 const etsyUrl = computed(() => {
-  return content.contact.etsyUrl || 'https://www.etsy.com/shop/artandabout'
+  return String(content.contact.etsyUrl || '').trim()
+})
+
+const showEtsyButton = computed(() => {
+  return Boolean(content.contact.showEtsy && etsyUrl.value)
 })
 
 const isActive = (path: string) => {

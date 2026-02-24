@@ -3,12 +3,17 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig()
+const siteUrl = String(config.public.siteUrl || 'https://artandabout.vercel.app').replace(/\/+$/, '')
+
 useHead({
-  title: 'My Work — Art and About',
+  title: 'Ceramic Gallery — Art & About by Tea Pupkova',
   meta: [
-    { name: 'description', content: 'Browse the collection of handmade, hand-painted ceramics by Tea Pupkova. Unique mugs, bowls, and more.' },
-    { property: 'og:title', content: 'My Work — Art and About' },
-    { property: 'og:description', content: 'Handmade ceramics gallery and shop.' }
-  ]
+    { name: 'description', content: 'Browse handmade, hand-painted ceramics by Tea Pupkova: mugs, bowls, teapots, tableware, and illustrated ceramic art.' },
+    { name: 'keywords', content: 'hand painted ceramics, handmade pottery, ceramic mugs, tea pupkova ceramics, art and about gallery' },
+    { property: 'og:title', content: 'Ceramic Gallery — Art & About' },
+    { property: 'og:description', content: 'Handmade and hand-painted ceramics gallery by Tea Pupkova.' }
+  ],
+  link: [{ rel: 'canonical', href: `${siteUrl}/gallery` }]
 })
 </script>

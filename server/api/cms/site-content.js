@@ -34,7 +34,7 @@ const defaultContent = {
     showEtsy: true,
     etsyLabel: 'Etsy shop:',
     etsyName: 'Art & About',
-    etsyUrl: 'https://www.etsy.com/shop/artandabout',
+    etsyUrl: 'https://www.etsy.com/shop/artandaboutpupkova',
     showFacebook: false,
     facebookLabel: 'Facebook:',
     facebookHandle: 'Art & About',

@@ -2,21 +2,27 @@
   <div class="mb-10 md:mb-16">
     <div v-if="slides.length">
       <div class="relative min-h-[500px] md:min-h-[560px] rounded-3xl overflow-hidden">
-        <img
-          :src="activeSlide.image"
-          :alt="activeSlide.title"
-          class="absolute inset-0 h-full w-full object-cover"
-        />
-        <div class="absolute inset-0 bg-[#F8D6B4]/16"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-[#9C4E3A]/12 via-transparent to-[#F8D6B4]/10"></div>
+        <nuxt-link
+          :to="`/product/${activeSlide.slug}`"
+          class="absolute inset-0 block"
+          :aria-label="`View ${activeSlide.title}`"
+        >
+          <img
+            :src="activeSlide.image"
+            :alt="activeSlide.title"
+            class="absolute inset-0 h-full w-full object-cover"
+          />
+          <div class="absolute inset-0 bg-[#E7A6A6]/24 mix-blend-multiply"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-[#9C4E3A]/22 via-[#D88A8A]/10 to-[#F8D6B4]/16"></div>
+        </nuxt-link>
       </div>
 
-      <div class="mt-3 rounded-xl border border-[#FFE083] bg-[#FFF8EE]/92 px-2.5 py-2.5 md:px-3 md:py-3">
+      <div class="mt-3 rounded-xl border border-[#9C4E3A]/30 bg-[#FFF8EE]/92 px-2.5 py-2.5 md:px-3 md:py-3">
         <div class="flex items-center gap-2 md:gap-3">
           <button
             type="button"
             @click="prevSlide"
-            class="link-fx h-9 w-9 rounded-full border border-[#FFCB06] bg-[#FFF8EE] text-[#9C4E3A] text-sm font-semibold hover:bg-[#FFF1B3] transition"
+            class="link-fx h-9 w-9 rounded-full border border-[#9C4E3A]/35 bg-[#FFF8EE] text-[#9C4E3A] text-sm font-semibold hover:bg-[#9C4E3A]/10 transition"
             aria-label="Previous slide"
           >
             ‹
@@ -43,27 +49,13 @@
           <button
             type="button"
             @click="nextSlide"
-            class="link-fx h-9 w-9 rounded-full border border-[#FFCB06] bg-[#FFF8EE] text-[#9C4E3A] text-sm font-semibold hover:bg-[#FFF1B3] transition"
+            class="link-fx h-9 w-9 rounded-full border border-[#9C4E3A]/35 bg-[#FFF8EE] text-[#9C4E3A] text-sm font-semibold hover:bg-[#9C4E3A]/10 transition"
             aria-label="Next slide"
           >
             ›
           </button>
         </div>
 
-        <div class="mt-2 flex items-center justify-center gap-2 text-sm">
-          <nuxt-link
-            to="/gallery"
-            class="link-fx inline-flex items-center rounded-full border border-[#FFCB06] bg-[#FFF8EE] text-[#9C4E3A] px-3.5 py-1.5 font-semibold hover:bg-[#FFF1B3] transition"
-          >
-            Browse Gallery
-          </nuxt-link>
-          <nuxt-link
-            :to="`/product/${activeSlide.slug}`"
-            class="link-fx inline-flex items-center rounded-full bg-[#D75641] text-white px-3.5 py-1.5 font-semibold hover:bg-[#C54D39] transition"
-          >
-            View Piece
-          </nuxt-link>
-        </div>
       </div>
     </div>
 

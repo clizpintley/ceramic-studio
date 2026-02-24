@@ -16,9 +16,15 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: 'Ceramic Artist Portfolio',
+      title: 'Art & About | Hand-painted Ceramics by Tea Pupkova',
       meta: [
-        { name: 'description', content: 'Hand-painted ceramic artist portfolio and shop' }
+        { name: 'description', content: 'Art & About by Tea Pupkova — handmade and hand-painted ceramics, including mugs, teapots, bowls, and illustrated functional pieces.' },
+        { name: 'keywords', content: 'Art and About, Tea Pupkova, Theodora Pupkova, Pupkova, hand-painted ceramics, handmade ceramics, ceramic art, ceramic mugs, teapots, pottery artist' },
+        { name: 'robots', content: 'index, follow' },
+        { property: 'og:site_name', content: 'Art & About' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:title', content: 'Art & About | Hand-painted Ceramics by Tea Pupkova' },
+        { property: 'og:description', content: 'Handmade and hand-painted ceramics by Tea Pupkova.' }
       ],
       link: [
         { rel: 'icon', type: 'image/png', href: '/images/logo.png' },
@@ -30,6 +36,9 @@ export default defineNuxtConfig({
     }
   },
   runtimeConfig: {
+    public: {
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://artandabout.vercel.app'
+    },
     cmsPassword: process.env.CMS_PASSWORD || 'vasko',
     chatbotMailHost: process.env.CHATBOT_MAIL_HOST || '',
     chatbotMailPort: process.env.CHATBOT_MAIL_PORT || '587',
